@@ -51,19 +51,18 @@ flowchart LR
 | Open Babel | 格式转换（可选） |
 | PyMOL ≥ 2.5 | 3D 渲染（可选；缺失时自动跳过 3D 只出 2D） |
 
-### 方式 A：conda 一键安装（推荐，外部工具一并装好）
+### 方式 A：conda + pip 混合安装（推荐，一条命令复现）
 
 ```bash
-# 1) 从 environment.yml 创建环境（conda-forge + bioconda 源，
-#    含 vina / meeko / openbabel / fpocket / rdkit / dimorphite-dl）
+# conda 只装 pip 装不了的 CLI 二进制与 pymol（conda-forge 源），
+# 环境内 pip 段自动安装本体 + 纯 Python 依赖（rdkit/meeko/openmm/pdbfixer/scipy/gemmi 等）
 conda env create -f environment.yml          # 或 mamba/micromamba create -n autovs -f environment.yml
 conda activate autovs
-
-# 2) 安装 AutoVS 本体（dev=pytest；mcp=仅 AI 客户端驱动时需要）
-pip install -e ".[dev,mcp]"
 ```
 
-> 说明：`environment.yml` 中的 GROMACS/Ambertools 为可选注释项，仅命中分子后续 MD 验证需要，批量虚拟筛选无需安装。
+> 注意：对接引擎用 conda-forge 的 **`vina`** 包（environment.yml 已声明）。bioconda 的
+> `autodock-vina` 官方已只剩 1.1.2（2011 年古董版），不要使用。
+> GROMACS/Ambertools 仅命中分子后续 MD 验证需要，批量虚拟筛选无需安装。
 
 ### 方式 B：pip 裸环境（外部工具自备）
 

@@ -22,21 +22,26 @@
 
 ## 2. 环境搭建（一次性）
 
-### 2.1 创建 conda 环境
+### 2.1 创建 conda 环境（只装 pip 装不了的 CLI 二进制）
 
 ```bash
-conda create -p ~/opt/gene-drug-automd/env -c conda-forge python=3.11 -y
-conda activate ~/opt/gene-drug-automd/env
+conda env create -f environment.yml   # 环境名 autovs：python + vina/openbabel/fpocket/pymol
+conda activate autovs
 ```
 
+> 注意：对接引擎用 conda-forge 的 **`vina`** 包（environment.yml 已声明）。bioconda 的
+> `autodock-vina` 官方已只剩 1.1.2（2011 年古董版），不要使用。
+
 ### 2.2 安装 Python 依赖
+
+上一步 environment.yml 的 pip 段已自动执行 `pip install -e ".[dev,mcp]"`；如单独执行：
 
 ```bash
 cd AutoVS        # 本仓库根目录
 pip install -e ".[dev,mcp]"
 ```
 
-这一步会装上：RDKit（化学信息学）、Meeko（PDBQT 准备）、pdbfixer/OpenMM（受体加氢）、matplotlib（分布图）、mcp（AI 客户端接入，可选）。
+这一步会装上：RDKit（化学信息学）、Meeko（PDBQT 准备）、pdbfixer/OpenMM（受体加氢）、scipy/gemmi（meeko 0.8 隐性依赖）、matplotlib（分布图）、mcp（AI 客户端接入，可选）。
 
 ### 2.3 安装外部工具
 

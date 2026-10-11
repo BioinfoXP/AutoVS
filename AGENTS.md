@@ -12,12 +12,13 @@ AutoVS：靶点结构 → FDA 全库虚拟筛选 → 出版级 3D/2D 可视化 �
 
 | 项 | 值 |
 |---|---|
-| Python 解释器 | `/home/xiap/opt/gene-drug-automd/env/bin/python`（conda 环境 `gene-drug-automd`） |
-| CLI 入口 | `/home/xiap/opt/gene-drug-automd/env/bin/autovs` |
-| 系统默认环境 | **没有** gene-drug-automd——直接 `python`/`pytest` 会失败，必须用上表绝对路径或先 `conda activate gene-drug-automd` |
-| 新机复现 | `conda env create -f environment.yml`（conda-forge + bioconda，含 vina/meeko/openbabel/fpocket/rdkit）；或 pip：`python3.11 -m venv .venv && pip install -e ".[dev,mcp]"`（外部工具自备并登记 config） |
+| conda | `/home/xiap/miniconda3/bin/conda`（25.11，libmamba solver）；环境名 **autovs**，位于 `/home/xiap/miniconda3/envs/autovs` |
+| Python 解释器 | `/home/xiap/miniconda3/envs/autovs/bin/python` |
+| CLI 入口 | `/home/xiap/miniconda3/envs/autovs/bin/autovs` |
+| 系统默认环境 | 没有 autovs——直接 `python`/`pytest` 会失败，必须用上表绝对路径或先 `conda activate autovs` |
+| 安装分工 | conda 只装 pip 装不了的：`vina`（conda-forge，**勿用 bioconda 的 autodock-vina，只剩 1.1.2**）/ openbabel / fpocket / pymol-open-source；其余全走 `pip install -e ".[dev,mcp]"`（含 rdkit/meeko/openmm/pdbfixer/scipy/gemmi） |
 | 本体安装 | editable 模式（`pip install -e .`），改代码即生效，无需重装 |
-| 外部工具 | vina/meeko(mk_prepare_receptor·mk_prepare_ligand)/obabel/fpocket/pymol，路径登记在 `config/framework.yaml` 的 `tools:` 段；体检命令 `autovs doctor` |
+| 外部工具 | 路径登记在 `config/framework.yaml` 的 `tools:` 段；体检命令 `autovs doctor` |
 
 ## 3. 路径速查（相对 `AutoVS/`）
 
@@ -58,7 +59,7 @@ docs/                    # framework.md（架构）mcp_guide.md（MCP 使用）
 ## 6. 常用命令
 
 ```bash
-PY=/home/xiap/opt/gene-drug-automd/env/bin
+PY=/home/xiap/miniconda3/envs/autovs/bin
 $PY/autovs doctor                                              # 环境体检
 $PY/autovs prepare-receptor --target config/targets/hsp90b1_7ull.yaml
 $PY/autovs gate --target config/targets/hsp90b1_7ull.yaml      # 共晶配体 redocking 质量门

@@ -40,7 +40,7 @@ mcp = FastMCP("autovs")
 BASE = Path(__file__).resolve().parent.parent
 DEFAULT_FRAMEWORK = BASE / "config" / "framework.yaml"
 DEFAULT_LIBRARY = BASE / "config" / "library.yaml"
-PY = sys.executable                     # 当前解释器（gene-drug-automd 环境）
+PY = sys.executable                     # 当前解释器（autovs conda 环境）
 _JOBS: dict[str, dict] = {}             # job_id -> {target_yaml, tag, proc, log}
 JOB_FILE = BASE / "temp" / "mcp_jobs.json"
 

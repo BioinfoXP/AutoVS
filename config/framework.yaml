@@ -14,16 +14,16 @@ paths:
   output_data_dir: /home/xiap/bio_project/for_others/AutoMD/AutoVS/output_data
   output_figure_dir: /home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure
 
-# 外部工具绝对路径（来自 gene-drug-automd 环境；见 ENVIRONMENT.md）
+# 外部工具绝对路径（conda 环境 autovs：/home/xiap/miniconda3/envs/autovs）
 tools:
-  python: /home/xiap/opt/gene-drug-automd/env/bin/python
-  vina: /home/xiap/opt/gene-drug-automd/env/bin/vina
-  mk_prepare_receptor: /home/xiap/opt/gene-drug-automd/env/bin/mk_prepare_receptor.py
-  mk_prepare_ligand: /home/xiap/opt/gene-drug-automd/env/bin/mk_prepare_ligand.py
-  mk_export: /home/xiap/opt/gene-drug-automd/env/bin/mk_export.py
-  obabel: /home/xiap/opt/gene-drug-automd/env/bin/obabel
-  fpocket: /home/xiap/opt/gene-drug-automd/env/bin/fpocket
-  pymol: /home/xiap/opt/gene-drug-automd/env/bin/pymol   # 可选；缺失时自动跳过 3D 渲染
+  python: /home/xiap/miniconda3/envs/autovs/bin/python
+  vina: /home/xiap/miniconda3/envs/autovs/bin/vina
+  mk_prepare_receptor: /home/xiap/miniconda3/envs/autovs/bin/mk_prepare_receptor.py
+  mk_prepare_ligand: /home/xiap/miniconda3/envs/autovs/bin/mk_prepare_ligand.py
+  mk_export: /home/xiap/miniconda3/envs/autovs/bin/mk_export.py
+  obabel: /home/xiap/miniconda3/envs/autovs/bin/obabel
+  fpocket: /home/xiap/miniconda3/envs/autovs/bin/fpocket
+  pymol: /home/xiap/miniconda3/envs/autovs/bin/pymol   # 可选；缺失时自动跳过 3D 渲染
 
 runtime:
   workers: 30               # 并行 worker 数（36 核机器留 6 核给系统）

@@ -70,7 +70,7 @@ AutoVS/
 {
   "mcpServers": {
     "autovs": {
-      "command": "/home/xiap/opt/gene-drug-automd/env/bin/python",
+      "command": "/home/xiap/miniconda3/envs/autovs/bin/python",
       "args": ["-m", "autovs.mcp_server"],
       "cwd": "/home/xiap/bio_project/for_others/AutoMD/AutoVS"
     }
@@ -124,7 +124,7 @@ report（dock 自动触发）  ──► 同目录 report.md + <批次>_ranking.
 
 环境配置与 MCP 配置相互独立，均可独立复现：
 
-- **conda 方式（推荐，外部工具一并装好）**：`conda env create -f environment.yml && conda activate autovs`（conda-forge + bioconda，含 vina/meeko/openbabel/fpocket/rdkit）；或复用已就绪环境 `conda activate "$HOME/opt/gene-drug-automd/env"`；
+- **conda 方式（推荐，CLI 二进制一并装好）**：`conda env create -f environment.yml && conda activate autovs`（conda-forge 的 vina/openbabel/fpocket/pymol-open-source；**勿用 bioconda 的 autodock-vina——官方已只剩 1.1.2**）；环境内 pip 段自动装本体与纯 Python 依赖；
 - **pip 方式（裸环境，外部工具自备）**：`python3.11 -m venv .venv && source .venv/bin/activate && pip install -e ".[dev,mcp]"`；vina/meeko/obabel/fpocket/pymol 需自行安装并登记到 `config/framework.yaml` 的 `tools:`；
 - **框架本体**：`pip install -e .`（editable，改代码即生效），CLI 注册为 `autovs`；
 - **外部二进制**（vina/meeko/fpocket）路径统一登记在 `config/framework.yaml` 的 `tools:`，`autovs doctor` 校验；
@@ -158,7 +158,7 @@ report（dock 自动触发）  ──► 同目录 report.md + <批次>_ranking.
 ## 7. 快速上手（开发人员视角）
 
 ```bash
-conda activate "$HOME/opt/gene-drug-automd/env"
+conda activate autovs   # /home/xiap/miniconda3/envs/autovs
 cd /home/xiap/bio_project/for_others/AutoMD/AutoVS
 
 autovs doctor                                        # 环境体检

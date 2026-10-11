@@ -16,7 +16,8 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Bio-Informatics",
     "Programming Language :: Python :: 3.11",
 ]
-# 依赖与 conda 环境 gene-drug-automd 对齐（见 environment.yml）
+# 依赖：纯 Python 侧走 pip（含受体修复 pdbfixer/openmm）；
+# CLI 二进制 vina/openbabel/fpocket 与 pymol（PyPI 无 Linux 轮子）由 conda 提供（见 environment.yml）
 dependencies = [
     "pyyaml>=6.0",
     "rdkit>=2024.3",
@@ -26,6 +27,10 @@ dependencies = [
     "numpy>=1.26",
     "requests>=2.31",
     "matplotlib>=3.8",
+    "openmm>=8.1",          # 受体质子化/修复
+    "pdbfixer>=1.10",       # PDBFile.writeFile(keepIds=True)
+    "scipy>=1.11",          # meeko 0.8 隐性依赖（元数据未声明）
+    "gemmi>=0.6",           # meeko 0.8 隐性依赖（元数据未声明）
 ]
 
 [project.optional-dependencies]
