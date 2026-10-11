@@ -47,7 +47,6 @@ PYMOL_POSE_COLORS = ["yellow", "magenta", "cyan", "orange", "salmon",
 # 带电侧链原子（盐桥判据）
 POSITIVE_SIDECHAIN = {"ARG": {"NH1", "NH2"}, "LYS": {"NZ"}, "HIS": {"ND1", "NE2"}}
 NEGATIVE_SIDECHAIN = {"ASP": {"OD1", "OD2"}, "GLU": {"OE1", "OE2"}}
-AROMATIC_RESIDUES = {"PHE", "TYR", "TRP", "HIS"}
 
 
 def _inter_color(name: str) -> str:
@@ -467,11 +466,19 @@ def _ring_centroids(mol, conf_xyz: np.ndarray) -> list[tuple[np.ndarray, list[in
 
 
 def _protein_rings(recs: dict[str, Any]) -> list[tuple[str, np.ndarray]]:
-    """芳香残基环心：PHE/TYR/TRP/HIS 的六元/五元环（取环原子坐标均值）。"""
+    """芳香残基环心（仅用环原子名均值，避免骨架原子拉偏质心）：
+    PHE/TYR 六元环、TRP 稠环体系、HIS 五元环。"""
+    _RING_ATOMS = {
+        "PHE": {"CG", "CD1", "CD2", "CE1", "CE2", "CZ"},
+        "TYR": {"CG", "CD1", "CD2", "CE1", "CE2", "CZ"},
+        "TRP": {"CG", "CD1", "CD2", "NE1", "CE2", "CE3", "CZ2", "CZ3", "CH2"},
+        "HIS": {"CG", "ND1", "CD2", "CE1", "NE2"},
+    }
     rings = []
     cur_res_atoms: dict[tuple, list[int]] = {}
     for i, r in enumerate(recs["recs"]):
-        if r["resname"] in AROMATIC_RESIDUES:
+        ring_names = _RING_ATOMS.get(r["resname"])
+        if ring_names and r["name"] in ring_names:
             cur_res_atoms.setdefault((r["resname"], r["chain"], r["resid"]), []).append(i)
     for (resname, chain, resid), idx in cur_res_atoms.items():
         xyz = np.array([recs["recs"][i]["xyz"] for i in idx])
@@ -588,10 +595,11 @@ def detect_interactions(pose_sdf: Path, receptor_pdb: Path) -> list[dict[str, An
             dist = float(np.linalg.norm(c - cxyz))
             if dist <= 5.5:
                 add(label, "PiStacking", f"centroid {dist:.2f} Å", ring_atoms)
-        if centroids and lig_charged:
+        # 阳离子-π：配体带电原子 ↔ 该蛋白环心 ≤ 5.0 Å
+        if centroids:
             for li in lig_charged:
-                c_near, atoms_near = min(centroids, key=lambda t: np.linalg.norm(L[li] - t[0]))
-                if np.linalg.norm(L[li] - c_near) <= 5.0:
+                if np.linalg.norm(L[li] - cxyz) <= 5.0:
+                    _, atoms_near = min(centroids, key=lambda t: np.linalg.norm(L[li] - t[0]))
                     add(label, "PiCation", "cation-pi", atoms_near)
     return out
 

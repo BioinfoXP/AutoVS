@@ -68,6 +68,8 @@ def aggregate_results(cfg: Config, results: list[dict[str, Any]], tag: str = "sc
         "screen": tag,
         "n_docked": len(rows),
         "n_hits_below_threshold": len(hits),
+        "n_failed": sum(1 for r in results if r.get("status") == "failed"),
+        "n_skipped_outlier": sum(1 for r in results if r.get("status") == "skipped"),
         "score_threshold_kcal_mol": threshold,
         "best_score_kcal_mol": rows[0]["top_score_kcal_mol"] if rows else None,
         "top_n": [dict(rank=i, entry_id=r["entry_id"], name=r["name"],

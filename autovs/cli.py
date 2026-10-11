@@ -152,7 +152,8 @@ def cmd_dock(args) -> int:
                         cfg.paths.temp_dir / "docking" / cfg.target.name / (args.tag or "screen"))
     summary = aggregate_results(cfg, results, tag=args.tag or "screen")
     print(f"对接完成: {summary['n_docked']} 条，命中（≤{summary['score_threshold_kcal_mol']}）"
-          f"{summary['n_hits_below_threshold']} 条")
+          f"{summary['n_hits_below_threshold']} 条"
+          f"，失败 {summary.get('n_failed', 0)}，离群预过滤 {summary.get('n_skipped_outlier', 0)}")
     print(f"排行榜  : {summary['ranking_csv']}")
 
     # 自动可视化：Top 命中 3D 渲染 + 2D 相互作用图（失败不影响主流程）

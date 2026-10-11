@@ -143,7 +143,9 @@ def run_gate(target_yaml: str) -> str:
 # ---------------------------------------------------------------- dock（长任务）
 @mcp.tool()
 def submit_dock(target_yaml: str, tag: str, limit: int | None = None) -> str:
-    """提交批量对接为后台任务（断点续跑，自动跳过已完成化合物），立即返回 job_id。limit 用于小规模冒烟。"""
+    """提交批量对接为后台任务（断点续跑，自动跳过已完成化合物），立即返回 job_id。
+    MW/可旋转键超限的离群大分子提交前自动预过滤（status=skipped），单配体超时/失败自动隔离不阻塞批次。
+    limit 用于小规模冒烟。完成后自动汇总排行 + 可视化 + 报告（含排行 CSV 副本）。"""
     _load_jobs()
     job_id = time.strftime("%Y%m%d_%H%M%S")
     log_path = BASE / "temp" / f"mcp_dock_{job_id}.log"
@@ -220,11 +222,13 @@ def visualize(target_yaml: str, tag: str, top_n: int = 10, entries: str = "") ->
 
 @mcp.tool()
 def generate_report(target_yaml: str, tag: str, top_show: int = 20) -> str:
-    """生成 Markdown 任务报告（概览/质量门/统计/Top 排行/图谱对照/解读注意），返回报告路径。"""
+    """生成 Markdown 任务报告（概览/质量门/统计/Top 排行/图谱对照/解读注意），
+    并把全量 rank 排行 CSV 副本输出到报告同目录（任务包自包含）。返回报告路径。"""
     from .report import generate_report as gen
     cfg = _cfg(target_yaml)
     path = gen(cfg, tag, top_show=int(top_show))
-    return f"任务报告: {path}"
+    csv_copy = path.parent / f"{tag}_ranking.csv"
+    return f"任务报告: {path}（排行副本: {csv_copy}）"
 
 
 def main() -> None:

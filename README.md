@@ -33,14 +33,15 @@ flowchart LR
 - **FDA 库全量本地化**：EBI ChEMBL REST（`max_phase=4` 已上市小分子）一键抓取 → RDKit 标准化（去盐、pH 7.4 质子化、ETKDG+MMFF94 3D 构象）→ 本地索引；**运行期 100% 离线**
 - **Redocking 质量门**：全库筛选前强制共晶配体重对接，判据为"打分窗口（1.0 kcal/mol）内最小 RMSD < 2 Å"（规避 Vina 打分近简并排序歧义），**FAIL 即拒绝全库筛选**
 - **批量对接**：多进程并行 + `result.json` 落盘，天然断点续跑；配置指纹校验防串味
+- **离群大分子自动防护**：MW/可旋转键超限条目提交前预过滤（防 Vina 天级卡死与接触面积虚高假阳性）+ 单配体超时兜底，失败一律隔离不阻塞批次
 - **出版级可视化（全自动化）**
   - 3D：PyMOL 正交投影口袋特写——半透明 cartoon、口袋残基 stick、像素级探针标定的残基标签（引导线数学上不交叉、永不压配体）
   - 2D：Discovery Studio 风格相互作用图——配体键线式居中、残基椭圆环绕节点按相互作用类型着色
   - `*_pair.png` 横拼对照图：3D 与 2D 残基一一对应，同图互读
-- **任务报告**：Markdown 自包含报告（概览/质量门/统计/Top 排行/图谱对照/解读注意事项），与图谱同目录、相对链接、整包可拷走
+- **任务报告**：Markdown 自包含报告（概览/质量门/统计/Top 排行/图谱对照/解读注意事项），内附全量 rank 排行 CSV 副本，与图谱同目录、相对链接、整包可拷走
 - **MCP server**：10 个工具暴露全流程，AI 客户端自然语言驱动（长任务提交/查询模式，server 重启不丢任务）
 
-## 环境要求与安装
+## 环境配置
 
 | 依赖 | 说明 |
 |---|---|
@@ -49,13 +50,36 @@ flowchart LR
 | Meeko（mk_prepare_receptor / mk_prepare_ligand） | PDB→PDBQT、SDF→PDBQT |
 | Open Babel | 格式转换（可选） |
 | PyMOL ≥ 2.5 | 3D 渲染（可选；缺失时自动跳过 3D 只出 2D） |
-| MCP（`pip install "mcp>=1.30,<2"`） | 仅 MCP server 需要 |
+
+### 方式 A：conda 一键安装（推荐，外部工具一并装好）
 
 ```bash
-# 1. 安装 Python 依赖（conda 或 pip 均可，参考 environment.yml）
+# 1) 从 environment.yml 创建环境（conda-forge + bioconda 源，
+#    含 vina / meeko / openbabel / fpocket / rdkit / dimorphite-dl）
+conda env create -f environment.yml          # 或 mamba/micromamba create -n autovs -f environment.yml
+conda activate autovs
+
+# 2) 安装 AutoVS 本体（dev=pytest；mcp=仅 AI 客户端驱动时需要）
+pip install -e ".[dev,mcp]"
+```
+
+> 说明：`environment.yml` 中的 GROMACS/Ambertools 为可选注释项，仅命中分子后续 MD 验证需要，批量虚拟筛选无需安装。
+
+### 方式 B：pip 裸环境（外部工具自备）
+
+```bash
+# 1) 纯 Python 环境
+python3.11 -m venv .venv
+source .venv/bin/activate
 pip install -e ".[dev,mcp]"
 
-# 2. 环境体检：检查 vina/pymol/mk_prepare/库索引是否就绪
+# 2) 外部工具（vina / meeko / obabel / fpocket / pymol）自行安装，
+#    并将绝对路径写入 config/framework.yaml 的 tools: 段
+```
+
+安装完成后体检（校验外部工具路径、库索引、目录布局是否就绪）：
+
+```bash
 autovs doctor
 ```
 
@@ -131,6 +155,9 @@ autovs report     --target config/targets/my_target.yaml --tag screen --top 20
 | `docking.score_threshold` | 命中阈值（默认 -7.0 kcal/mol） |
 | `docking.top_n` | 汇总后自动可视化的 Top N |
 | `docking.redock_seed` | 对接随机种子（保证可复现） |
+| `docking.max_rotatable_bonds` | 离群预过滤：可旋转键上限（默认 30；0=关闭），超限条目提交前跳过 |
+| `docking.max_mol_weight` | 离群预过滤：分子量上限 Da（默认 1000；0=关闭） |
+| `docking.ligand_timeout_s` | 单配体 Vina 超时秒数（默认 1800；0=不限制），超时杀进程并按失败隔离 |
 
 新增靶点只需：清洗好的 PDB（或给 PDB ID 自动下载）+ 共晶配体名，复制 `template.yaml` 改三行即可。
 
@@ -155,7 +182,13 @@ autovs mcp                            启动 MCP server（stdio）
 
 通用参数 `--framework / --library / --log-level` 可覆盖默认配置与日志（默认 `config/framework.yaml`、`config/library.yaml`）。排行榜与打分分布由 dock 自动汇总生成；对接完成后重跑 `autovs dock` 只会补算缺失化合物，不重复消耗。
 
-## MCP 接入
+## MCP 配置
+
+**前置依赖**（与上面筛选运行环境分离，仅 AI 客户端驱动需要）：
+
+```bash
+pip install "mcp>=1.30,<2"      # 或安装本体时带上：pip install -e ".[mcp]"
+```
 
 将以下配置加入 AI 客户端（Trae / Claude Desktop / Cursor）的 MCP 设置即可用自然语言驱动全流程：
 
@@ -190,12 +223,13 @@ output_data/<靶点>/
 output_figure/<靶点>/
   <批次>_score_distribution.pdf       全库打分分布
   <批次>/                             任务自包含目录（整包可拷走）
+    report.md                         Markdown 任务报告
+    <批次>_ranking.csv                全量排行榜副本（rank 排序，与 report 同包）
+    MANIFEST.csv                      图谱索引（rank/化合物/打分/路径/相互作用清单）
     pose_R{rank}_{药名}_3d.png        3D 口袋特写
     pose_R{rank}_{药名}_2d.{pdf,png}  2D 相互作用图
     pose_R{rank}_{药名}_pair.png      3D|2D 横拼对照（文件名即对应关系）
     top_overview.png                  Top N 叠加总览
-    MANIFEST.csv                      图谱索引（rank/化合物/打分/路径/相互作用清单）
-    report.md                         Markdown 任务报告
 temp/                                 中间产物（受体/对接工作目录，可随时删除重算）
 ```
 

@@ -151,6 +151,10 @@ class DockingParams:
     score_threshold: float = -7.0
     top_n: int = 50
     redock_seed: int = 20261010
+    # 离群大分子自动防护（防止单条卡死阻塞批次 / 虚高打分假阳性）
+    max_rotatable_bonds: int = 30    # 预过滤：可旋转键上限（0=不限制）
+    max_mol_weight: float = 1000.0   # 预过滤：分子量上限 Da（0=不限制）
+    ligand_timeout_s: int = 1800     # 单配体 vina 超时（秒，0=不限制）
 
 
 @dataclass

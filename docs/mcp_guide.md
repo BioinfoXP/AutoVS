@@ -10,9 +10,11 @@ MCP（Model Context Protocol）是 AI 客户端（Trae / Claude Desktop / Cursor
 
 ### 1.1 前置条件（一次性）
 
+> MCP 依赖与筛选运行环境（conda/pip，见 README「环境配置」）**相互独立**：先把 AutoVS 本体装好并跑通 `autovs doctor`，再叠加这一步。
+
 ```bash
 # 在 AutoVS 的 Python 环境里装 MCP SDK（注意必须 <2，2.x 改名不兼容）
-pip install "mcp>=1.30,<2"
+pip install "mcp>=1.30,<2"        # 安装本体时也可带上：pip install -e ".[mcp]"
 
 # 验证：能列出 10 个工具即 OK
 python -c "import autovs.mcp_server; print('OK')"
@@ -99,11 +101,11 @@ AI 返回 vina/pymol/库条数即接入成功。
 | 3 | `library_search` | 按药名/ID 子串搜库 | `query`, `limit` | "库里有没有伊马替尼？" |
 | 4 | `prepare_receptor` | 受体清洗（去配体/水/altloc 归一）+ 加氢 | `target_yaml` | 质量门前（也可跳过，gate 会自动准备） |
 | 5 | `run_gate` | 质量门：共晶配体重对接，窗口内最小 RMSD < 2 Å 才 PASS | `target_yaml` | **全库筛选前必须 PASS** |
-| 6 | `submit_dock` | **后台提交**批量对接（断点续跑），立即返回 job_id | `target_yaml`, `tag`, `limit`(可选冒烟) | 正式筛选 |
+| 6 | `submit_dock` | **后台提交**批量对接（断点续跑；MW/可旋转键超限大分子自动预过滤，超时/失败自动隔离），立即返回 job_id | `target_yaml`, `tag`, `limit`(可选冒烟) | 正式筛选 |
 | 7 | `dock_status` | 查真实进度：已完成数/总数/进程存活/最后日志 | `job_id` 或 `target_yaml+tag` | 对接中轮询；**server 重启后也可按靶点+批次追查** |
 | 8 | `query_ranking` | 查排行榜 Top N（可只看阈值命中） | `target_yaml`, `tag`, `top_n`, `below_threshold_only` | 对接完/中途看结果 |
 | 9 | `visualize` | 生成 3D 口袋图 + 2D 相互作用图 + 3D\|2D 对照图 | `target_yaml`, `tag`, `top_n` 或 `entries` | 深入看具体分子 |
-| 10 | `generate_report` | 生成 Markdown 任务报告 | `target_yaml`, `tag`, `top_show` | 收尾交付 |
+| 10 | `generate_report` | 生成 Markdown 任务报告，并在报告同目录附全量 rank 排行 CSV 副本 | `target_yaml`, `tag`, `top_show` | 收尾交付 |
 
 细节说明：
 

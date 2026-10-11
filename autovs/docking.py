@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import subprocess
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -50,6 +51,7 @@ def dock_single(
     tools,
     vina_threads: int = 1,
     log_path: Path | None = None,
+    timeout_s: int | None = None,
 ) -> dict[str, Any]:
     """执行一次 Vina 对接，返回 {top_score, scores, pose_pdbqt, pose_sdf, elapsed_s}。"""
     out_dir = ensure_dir(Path(out_dir))
@@ -69,7 +71,11 @@ def dock_single(
         "--out", str(poses_pdbqt),
     ]
     t0 = time.time()
-    run_cmd(cmd, cwd=out_dir, log=log_path or (out_dir / "vina.log"))
+    try:
+        run_cmd(cmd, cwd=out_dir, log=log_path or (out_dir / "vina.log"),
+                timeout=int(timeout_s) if timeout_s and int(timeout_s) > 0 else None)
+    except subprocess.TimeoutExpired as exc:
+        raise DockingError(f"Vina 超时（>{timeout_s}s），疑似超大/高柔性配体，已终止: {ligand_pdbqt}") from exc
     scores = vina_scores(poses_pdbqt)
     if not scores:
         raise DockingError(f"Vina 未返回打分: {out_dir}")
@@ -90,7 +96,7 @@ def dock_single(
 def _dock_entry_job(args: tuple) -> dict[str, Any]:
     """线程池 worker：单条目对接（子进程调用 Vina，GIL 不受限）。"""
     (entry_id, ligand_pdbqt, receptor_pdbqt, center, size, out_dir,
-     exh, num_modes, seed, tools_dict, threads, cfg_hash) = args
+     exh, num_modes, seed, tools_dict, threads, cfg_hash, timeout_s) = args
     from .config import ToolsConfig
     tools = ToolsConfig(**tools_dict)
     result_json = Path(out_dir) / "result.json"
@@ -109,10 +115,10 @@ def _dock_entry_job(args: tuple) -> dict[str, Any]:
             receptor_pdbqt=receptor_pdbqt, ligand_pdbqt=ligand_pdbqt,
             center=center, size=size, out_dir=out_dir,
             exhaustiveness=exh, num_modes=num_modes, seed=seed,
-            tools=tools, vina_threads=threads,
+            tools=tools, vina_threads=threads, timeout_s=timeout_s,
         )
         payload = {"entry_id": entry_id, "status": "ok", "config_hash": cfg_hash, **res}
-    except (CommandError, DockingError) as exc:
+    except (CommandError, DockingError, subprocess.TimeoutExpired) as exc:
         payload = {"entry_id": entry_id, "status": "failed", "config_hash": cfg_hash,
                    "error": f"{type(exc).__name__}: {exc}"}
     write_json(result_json, payload)
@@ -138,23 +144,51 @@ def run_batch(
     })
 
     jobs = []
+    results: list[dict[str, Any]] = []
+    n_filtered = 0
+    assert cfg.docking is not None
+    max_rot = int(getattr(cfg.docking, "max_rotatable_bonds", 0) or 0)
+    max_mw = float(getattr(cfg.docking, "max_mol_weight", 0) or 0)
+    timeout_s = int(getattr(cfg.docking, "ligand_timeout_s", 0) or 0)
     for entry in entries:
         if not entry.pdbqt_path or not Path(entry.pdbqt_path).exists():
             jobs.append(None)
             continue
+        # 离群大分子预过滤：MW/可旋转键超限的直接跳过（提交前拦截，
+        # 避免 Vina 按天卡死与接触面积虚高假阳性；阈值可在 target.yaml 调整）
+        if max_rot or max_mw:
+            try:
+                rot = int(float(entry.row.get("rotatable_bonds", 0) or 0))
+                mw = float(entry.row.get("mol_weight", 0) or 0)
+            except ValueError:
+                rot, mw = 0, 0.0
+            reasons = []
+            if max_rot and rot > max_rot:
+                reasons.append(f"rotatable_bonds={rot}>{max_rot}")
+            if max_mw and mw > max_mw:
+                reasons.append(f"MW={mw:.0f}>{max_mw:.0f}")
+            if reasons:
+                n_filtered += 1
+                payload = {"entry_id": entry.entry_id, "status": "skipped", "config_hash": cfg_hash,
+                           "reason": "; ".join(reasons), "name": entry.name}
+                write_json(Path(out_root) / entry.entry_id / "result.json", payload)
+                results.append(payload)
+                continue
         jobs.append((
             entry.entry_id, entry.pdbqt_path, str(receptor_pdbqt),
             center, size, str(out_root / entry.entry_id),
             int(cfg.docking.exhaustiveness), int(cfg.docking.num_modes),
             int(cfg.docking.redock_seed) + hash(entry.entry_id) % 10000,
-            cfg.tools.as_dict(), cfg.runtime.vina_threads, cfg_hash,
+            cfg.tools.as_dict(), cfg.runtime.vina_threads, cfg_hash, timeout_s,
         ))
 
-    results: list[dict[str, Any]] = []
     pending = [j for j in jobs if j is not None]
     skipped = len(jobs) - len(pending)
     if skipped:
         log.warning("跳过 %d 个缺少 PDBQT 的条目", skipped)
+    if n_filtered:
+        log.warning("预过滤 %d 个离群大分子（超 MW≤%s Da / 可旋转键≤%s 阈值，见各 result.json）",
+                    n_filtered, max_mw or "∞", max_rot or "∞")
 
     workers = max(1, int(cfg.runtime.workers))
     log.info("批量对接启动: %d 个条目（workers=%d）", len(pending), workers)
@@ -170,6 +204,7 @@ def run_batch(
 
     n_ok = sum(1 for r in results if r["status"] in {"ok", "cached"})
     n_fail = sum(1 for r in results if r["status"] == "failed")
-    log.info("批量对接完成: 成功 %d（其中缓存复用 %d），失败 %d",
-             n_ok, sum(1 for r in results if r["status"] == "cached"), n_fail)
+    n_skip = sum(1 for r in results if r["status"] == "skipped")
+    log.info("批量对接完成: 成功 %d（其中缓存复用 %d），失败 %d，预过滤跳过 %d",
+             n_ok, sum(1 for r in results if r["status"] == "cached"), n_fail, n_skip)
     return results

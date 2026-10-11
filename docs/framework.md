@@ -56,10 +56,10 @@ AutoVS/
 | `autovs/library.py` | FDA 库本地化：可插拔数据源 → 本地索引 → 离线访问 | `library_fetch()` / `library_build()` / `LocalLibrary` |
 | `autovs/ligand.py` | 单分子准备链：去盐 → 质子化 → 3D → PDBQT | `build_entry()` / `enumerate_states()` |
 | `autovs/receptor.py` | 受体清洗/准备、对接盒、质量门（redocking RMSD） | `prepare_receptor()` / `run_gate()` / `evaluate_redocking()` |
-| `autovs/docking.py` | Vina 批量引擎：并行 + 断点续跑 + 失败隔离 | `dock_single()` / `run_batch()` |
-| `autovs/aggregate.py` | 汇总排序、阈值过滤、打分分布图 | `aggregate_results()` |
+| `autovs/docking.py` | Vina 批量引擎：并行 + 断点续跑 + 失败隔离 + 离群预过滤/单配体超时 | `dock_single()` / `run_batch()` |
+| `autovs/aggregate.py` | 汇总排序、阈值过滤、打分分布图（含失败/预过滤计数） | `aggregate_results()` |
 | `autovs/visualize.py` | Top 命中自动可视化：PyMOL 3D 渲染 + DS 风格 2D 相互作用图 | `run_visualize()` / `detect_interactions()` |
-| `autovs/report.py` | Markdown 任务报告（概览/质量门/统计/排行/图谱对照） | `generate_report()` |
+| `autovs/report.py` | Markdown 任务报告（概览/质量门/统计/排行/图谱对照）+ 全量排行 CSV 副本 | `generate_report()` |
 | `autovs/mcp_server.py` | MCP server：全流程 10 工具暴露给 AI 客户端（stdio） | `autovs mcp` / `python -m autovs.mcp_server` |
 | `autovs/cli.py` | 统一命令行入口 | `autovs <command>` |
 | `autovs/utils.py` | 日志 / 子进程 / JSON / 配置指纹 | `run_cmd()` / `config_hash()` |
@@ -100,6 +100,7 @@ visualize（dock 自动触发）──► output_figure/<靶点>/<批次>/   # �
                                 ├─  pose_R{rank}_{药名}_2d.{pdf,png} # 2D 相互作用图
                                 ├─  pose_R{rank}_{药名}_pair.png     # 3D|2D 横拼对照图
                                 ├─  top_overview.png / MANIFEST.csv / <批次>_visualize_summary.json
+report（dock 自动触发）  ──► 同目录 report.md + <批次>_ranking.csv 副本（全量排行，报告自包含）
 ```
 
 可视化模块要点：
@@ -109,21 +110,25 @@ visualize（dock 自动触发）──► output_figure/<靶点>/<批次>/   # �
 - **3D↔2D 对应关系**：同一姿势的 3D/2D/对照图共用文件前缀 `pose_R{rank}_{药名}`；`_pair.png` 将两图等高横拼，残基一一对应可直接互读；MANIFEST.csv 汇总 rank/化合物/打分/各图路径/相互作用清单。
 - **指定化合物可视化**：`autovs visualize --target ... --tag ... --entry "tadalafil,FDA00466"`（entry_id 精确或药名子串，大小写不敏感，逗号分隔；给出时忽略 --top），产物落入同一任务目录、同一命名规则。
 - **受体加氢**：pdbfixer + OpenMM（pH 7.4，`keepIds=True` 保留原始残基编号，保证 2D/3D 编号一致）。
-- **自动化**：`autovs dock` 汇总后自动调用 `run_visualize()`（失败仅告警不影响主流程）；也可独立执行 `autovs visualize --target ... --tag ... --top N`。
+- **自动化**：`autovs dock` 汇总后自动调用 `run_visualize()` 与 `generate_report()`（失败仅告警不影响主流程）；也可独立执行 `autovs visualize --target ... --tag ... --top N`、`autovs report --target ... --tag ...`。报告内附全量 rank 排行 CSV 副本与相对链接，任务目录整包拷走即含排行。
 
 ### 3.2 关键设计决策
 
 1. **质量门（Gate）是硬性放行条件**：共晶配体重对接打分窗口（默认 1.0 kcal/mol）内最小 RMSD < 2.0 Å 才允许全库筛选。判据采用行业通用 redocking 标准——晶体学姿势须在 top-ranked poses 中被复现，而非苛求 top-1 pose（Vina 打分排序存在近简并歧义）。
 2. **断点续跑以配置指纹为准**：每个条目 `result.json` 记录 `config_hash`（exhaustiveness/num_modes/seed/盒子），指纹不一致自动重算，一致则跳过。
 3. **失败隔离**：单分子准备或对接失败只写 `error` 字段，批次不中断，事后统一统计重试。
-4. **可插拔数据源**：`chembl`（默认）/ `zinc` / `local` 三源适配，网络层仅存在于 fetch 阶段。
+4. **离群大分子自动防护**（docking 三参数，可在 target.yaml 调整，0=关闭）：`max_rotatable_bonds=30` / `max_mol_weight=1000` 提交前预过滤（MW/柔性超限的糖肽类大分子 Vina 会卡死数天且打分靠接触面积虚高，属假阳性来源），写 `status=skipped + reason`；`ligand_timeout_s=1800` 对每个 vina 子进程限时，超时转 DockingError 走失败隔离。summary.json 记录 `n_failed` / `n_skipped_outlier`。
+5. **可插拔数据源**：`chembl`（默认）/ `zinc` / `local` 三源适配，网络层仅存在于 fetch 阶段。
 
 ## 4. 依赖管理方案
 
-- **运行环境**：`conda activate "$HOME/opt/gene-drug-automd/env"`（已就绪，`autovs doctor` 全绿）；
-- **新机器复现**：`micromamba create -n autovs -f environment.yml`；
+环境配置与 MCP 配置相互独立，均可独立复现：
+
+- **conda 方式（推荐，外部工具一并装好）**：`conda env create -f environment.yml && conda activate autovs`（conda-forge + bioconda，含 vina/meeko/openbabel/fpocket/rdkit）；或复用已就绪环境 `conda activate "$HOME/opt/gene-drug-automd/env"`；
+- **pip 方式（裸环境，外部工具自备）**：`python3.11 -m venv .venv && source .venv/bin/activate && pip install -e ".[dev,mcp]"`；vina/meeko/obabel/fpocket/pymol 需自行安装并登记到 `config/framework.yaml` 的 `tools:`；
 - **框架本体**：`pip install -e .`（editable，改代码即生效），CLI 注册为 `autovs`；
 - **外部二进制**（vina/meeko/fpocket）路径统一登记在 `config/framework.yaml` 的 `tools:`，`autovs doctor` 校验；
+- **MCP 依赖单独剥离**：extras `mcp`（`pip install "mcp>=1.30,<2"`），仅 AI 客户端驱动需要，纯命令行使用可不装；
 - 版本约束只锁下限（关键库），避免与 conda-forge 滚动更新冲突。
 
 ## 5. 基础配置体系

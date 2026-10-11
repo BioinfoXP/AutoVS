@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import csv
 import json
+import shutil
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -35,6 +36,16 @@ def generate_report(cfg: Config, tag: str, top_show: int = 20) -> Path:
     threshold = float(cfg.docking.score_threshold)
     n_hits = sum(1 for r in rows if r["top_score_kcal_mol"] and float(r["top_score_kcal_mol"]) <= threshold)
     best = rows[0] if rows else None
+
+    # ---- 全量排行 CSV 副本：报告目录自包含（整包拷走即含 rank 排行）----
+    rank_copy = task_dir / ranking_csv.name
+    shutil.copyfile(ranking_csv, rank_copy)
+
+    # ---- 汇总统计（summary.json 由 aggregate 写出，含失败/预过滤计数）----
+    summary_path = data_dir / f"{tag}_summary.json"
+    summary: dict[str, Any] = {}
+    if summary_path.exists():
+        summary = json.loads(summary_path.read_text(encoding="utf-8"))
 
     # ---- 质量门（gate_result.json 由 autovs gate 写出）----
     gate_path = cfg.paths.temp_dir / "receptor" / tgt / "gate_result.json"
@@ -82,6 +93,11 @@ def generate_report(cfg: Config, tag: str, top_show: int = 20) -> Path:
     ap(f"- 阈值命中（≤ {threshold} kcal/mol）：**{n_hits}** 个（{len(rows) and n_hits / len(rows) * 100:.1f}%）")
     if best:
         ap(f"- 最佳打分：**{best['top_score_kcal_mol']} kcal/mol**（{best['name'] or best['entry_id']}，rank {best['rank']}）")
+    if summary.get("n_skipped_outlier"):
+        ap(f"- 离群预过滤：{summary['n_skipped_outlier']} 个（MW ≤ {cfg.docking.max_mol_weight} Da 且可旋转键 ≤ {cfg.docking.max_rotatable_bonds} 之外的大分子，防止 Vina 卡死与虚高假阳性）")
+    if summary.get("n_failed"):
+        ap(f"- 对接失败：{summary['n_failed']} 个（已失败隔离，详见各 result.json 的 error 字段）")
+    ap(f"- 全量排行榜：[`{ranking_csv.name}`]({ranking_csv.name})（{len(rows)} 条按 rank 排序，与图谱同包）")
     ap("")
     dist_rel = f"../{tag}_score_distribution.pdf"
     if (fig_dir / f"{tag}_score_distribution.pdf").exists():
@@ -124,7 +140,7 @@ def generate_report(cfg: Config, tag: str, top_show: int = 20) -> Path:
     ap("- Vina 对大环、多芳环、高柔性分子存在系统性打分偏好；Top 命中中该类骨架占比偏高时，建议按分子量/柔性分箱后再比较。")
     ap("- 2D 相互作用为几何判据推断（氢键 H···A ≤2.6 Å 且 D-H···A >110°；疏水 C···C ≤4.0 Å；盐桥 ≤4.0 Å；π 堆积环心 ≤5.5 Å；阳离子-π ≤5.0 Å），供快速检视，不构成定量结论。")
     ap("- 3D 图为正交投影口袋特写：天蓝半透明 cartoon、配体与口袋残基 stick、绿色虚线为氢键；标签经像素级标定，与残基一一对应。")
-    ap("- 完整排行榜见 `../../{data}/{tgt}/{tag}_ranking.csv`；图谱索引见 `MANIFEST.csv`。".replace("{data}", Path(cfg.paths.output_data_dir).name).replace("{tgt}", tgt))
+    ap(f"- 完整排行榜见本包 `{ranking_csv.name}`（{len(rows)} 条）；图谱索引见 `MANIFEST.csv`。")
     ap("")
 
     out = task_dir / "report.md"
