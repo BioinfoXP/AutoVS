@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autovs"
+version = "0.1.0"
+description = "AutoVS：FDA 已上市药物库本地化批量虚拟筛选框架（Vina 对接）"
+readme = "README.md"
+requires-python = ">=3.11"
+# 依赖与 conda 环境 gene-drug-automd 对齐（见 environment.yml）
+dependencies = [
+    "pyyaml>=6.0",
+    "rdkit>=2024.3",
+    "meeko>=0.6",
+    "dimorphite-dl>=2.0",
+    "pandas>=2.0",
+    "numpy>=1.26",
+    "requests>=2.31",
+    "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+mcp = ["mcp>=1.30,<2"]   # MCP server（2.x 改名 MCPServer，暂不跟进）
+
+[project.scripts]
+autovs = "autovs.cli:main"
+
+[tool.setuptools]
+packages = ["autovs"]

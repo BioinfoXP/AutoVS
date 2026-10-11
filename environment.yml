@@ -1,0 +1,26 @@
+# AutoVS 运行环境（与 gene-drug-automd 环境对齐，独立可复现）
+# 推荐直接复用已就绪环境：conda activate "$HOME/opt/gene-drug-automd/env"
+# 如需全新安装：
+#   micromamba create -n autovs -f environment.yml
+#   注意：GROMACS 仅 MD 阶段需要；批量对接阶段无需安装
+name: autovs
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - pyyaml
+  - requests
+  - matplotlib
+  - rdkit>=2024.3
+  - openbabel>=3.1
+  - meeko>=0.6
+  - dimorphite-dl>=2.0
+  - autodock-vina>=1.2.5
+  - fpocket
+  - pytest
+  # 可选：命中分子后续 MD 验证
+  # - gromacs>=2024=nompi_cuda*
+  # - ambertools

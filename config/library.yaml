@@ -1,0 +1,41 @@
+# =====================================================================
+# FDA 已上市药物库——本地化配置
+# 数据流：source.fetch(仅此步骤联网) -> raw/ -> build(纯本地) -> prepared/ + index/
+# 运行期（查询/对接）100% 离线，不依赖任何远程接口
+# =====================================================================
+library:
+  name: fda_approved_drugs
+  version: "v1"
+
+  source:
+    # 可插拔数据源：
+    #   chembl : EBI ChEMBL 官方 REST，max_phase=4 已上市小分子（默认，可脚本化）
+    #   zinc   : ZINC FDA 子集直链下载（站点有反爬校验时请用 local 导入）
+    #   local  : 导入本地 SDF / SMI 文件
+    type: chembl
+    base_url: https://www.ebi.ac.uk/chembl/api/data
+    max_phase: 4
+    molecule_type: Small molecule
+    page_size: 1000
+    # zinc 源专用（type: zinc 时生效）
+    zinc_url: https://zinc15.docking.org/substances/subsets/fda.smi
+    # local 源专用（type: local 时生效）
+    local_file: null
+
+  prepare:
+    ph: 7.4                  # 生理 pH
+    ph_tolerance: 1.0
+    protonation_precision: 1.0
+    max_variants: 1          # 每个化合物保留的质子化状态数（批量筛选默认 1）
+    max_tautomers_per_state: 1
+    fragment_parent: true    # 去盐：保留最大有机片段
+    embed: etkdg             # 3D 构象：ETKDG + MMFF94 优化
+    optimize: mmff
+    shard_size: 200          # prepared/ 分片目录大小
+    skip_existing: true      # 断点续跑：已有产物直接跳过
+
+  local:
+    raw_json: /home/xiap/bio_project/for_others/AutoMD/AutoVS/data/fda_library/raw/source_records.json
+    manifest: /home/xiap/bio_project/for_others/AutoMD/AutoVS/data/fda_library/raw/manifest.json
+    prepared_dir: /home/xiap/bio_project/for_others/AutoMD/AutoVS/data/fda_library/prepared
+    index_csv: /home/xiap/bio_project/for_others/AutoMD/AutoVS/data/fda_library/index/fda_library_index.csv

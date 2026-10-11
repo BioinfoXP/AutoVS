@@ -1,0 +1,143 @@
+{
+  "target": "EGFR_demo",
+  "tag": "smoke",
+  "n_poses": 5,
+  "3d_png": [
+    "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_3d/pose_R01.png",
+    "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_3d/pose_R02.png",
+    "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_3d/pose_R03.png",
+    "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_3d/pose_R04.png",
+    "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_3d/pose_R05.png",
+    "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_3d/top_overview.png"
+  ],
+  "2d_items": [
+    {
+      "rank": 1,
+      "name": "RISDIPLAM",
+      "interactions": [
+        "MET769.A:HBAcceptor",
+        "LEU694.A:Hydrophobic",
+        "LEU768.A:Hydrophobic",
+        "MET769.A:Hydrophobic",
+        "ALA719.A:Hydrophobic",
+        "LEU820.A:Hydrophobic",
+        "THR830.A:Hydrophobic",
+        "ASP831.A:Hydrophobic",
+        "LYS721.A:Hydrophobic",
+        "MET742.A:Hydrophobic",
+        "THR766.A:Hydrophobic",
+        "LEU764.A:Hydrophobic",
+        "VAL702.A:Hydrophobic",
+        "PRO770.A:Hydrophobic"
+      ],
+      "pdf": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_2d/pose_R01_RISDIPLAM.pdf",
+      "png": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_2d/pose_R01_RISDIPLAM.png"
+    },
+    {
+      "rank": 2,
+      "name": "BUCLIZINE HYDROCHLORIDE",
+      "interactions": [
+        "PHE699.A:Hydrophobic",
+        "LYS721.A:Hydrophobic",
+        "ASP831.A:Hydrophobic",
+        "LEU820.A:Hydrophobic",
+        "LEU694.A:Hydrophobic",
+        "LEU768.A:Hydrophobic",
+        "MET769.A:Hydrophobic",
+        "ALA719.A:Hydrophobic",
+        "VAL702.A:Hydrophobic",
+        "PHE699.A:PiStacking"
+      ],
+      "pdf": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_2d/pose_R02_BUCLIZINE_HYDROCHLORIDE.pdf",
+      "png": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_2d/pose_R02_BUCLIZINE_HYDROCHLORIDE.png"
+    },
+    {
+      "rank": 3,
+      "name": "VILAZODONE HYDROCHLORIDE",
+      "interactions": [
+        "ASP831.A:HBDonor",
+        "LYS721.A:HBAcceptor",
+        "THR766.A:HBAcceptor",
+        "LYS721.A:Hydrophobic",
+        "LEU820.A:Hydrophobic",
+        "VAL702.A:Hydrophobic",
+        "PHE699.A:Hydrophobic",
+        "PHE699.A:PiStacking"
+      ],
+      "pdf": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_2d/pose_R03_VILAZODONE_HYDROCHLORIDE.pdf",
+      "png": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_2d/pose_R03_VILAZODONE_HYDROCHLORIDE.png"
+    },
+    {
+      "rank": 4,
+      "name": "ELAGOLIX",
+      "interactions": [
+        "LYS721.A:HBAcceptor",
+        "CYS773.A:HBAcceptor",
+        "GLY772.A:Hydrophobic",
+        "LEU694.A:Hydrophobic",
+        "VAL702.A:Hydrophobic",
+        "LEU820.A:Hydrophobic",
+        "ALA719.A:Hydrophobic",
+        "LYS721.A:Hydrophobic",
+        "THR766.A:Hydrophobic",
+        "PHE699.A:Hydrophobic",
+        "PHE688.A:PiCation",
+        "PHE699.A:PiStacking",
+        "PHE699.A:PiCation",
+        "TYR703.A:PiCation",
+        "TRP707.A:PiCation",
+        "TYR740.A:PiCation",
+        "HIS749.A:PiCation",
+        "PHE771.A:PiCation",
+        "TYR777.A:PiCation",
+        "HIS781.A:PiCation",
+        "TYR789.A:PiCation",
+        "TRP793.A:PiCation",
+        "TYR803.A:PiCation",
+        "HIS811.A:PiCation",
+        "HIS826.A:PiCation",
+        "PHE832.A:PiCation",
+        "TYR845.A:PiCation",
+        "HIS846.A:PiCation",
+        "TRP856.A:PiCation",
+        "HIS864.A:PiCation",
+        "TYR867.A:PiCation",
+        "HIS869.A:PiCation",
+        "TRP874.A:PiCation",
+        "TYR876.A:PiCation",
+        "TRP881.A:PiCation",
+        "PHE886.A:PiCation",
+        "TYR891.A:PiCation",
+        "TYR920.A:PiCation",
+        "TRP927.A:PiCation",
+        "PHE937.A:PiCation",
+        "PHE944.A:PiCation",
+        "TYR954.A:PiCation",
+        "HIS964.A:PiCation",
+        "TYR992.A:PiCation"
+      ],
+      "pdf": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_2d/pose_R04_ELAGOLIX.pdf",
+      "png": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_2d/pose_R04_ELAGOLIX.png"
+    },
+    {
+      "rank": 5,
+      "name": "METHYSERGIDE",
+      "interactions": [
+        "ASP831.A:HBDonor",
+        "ASP831.A:HBAcceptor",
+        "LYS721.A:Hydrophobic",
+        "LEU764.A:Hydrophobic",
+        "THR766.A:Hydrophobic",
+        "MET742.A:Hydrophobic",
+        "ALA719.A:Hydrophobic",
+        "VAL702.A:Hydrophobic",
+        "PHE699.A:Hydrophobic",
+        "LEU694.A:Hydrophobic",
+        "MET769.A:Hydrophobic",
+        "LEU820.A:Hydrophobic"
+      ],
+      "pdf": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_2d/pose_R05_METHYSERGIDE.pdf",
+      "png": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_2d/pose_R05_METHYSERGIDE.png"
+    }
+  ]
+}

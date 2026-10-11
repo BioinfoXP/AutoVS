@@ -1,0 +1,35 @@
+# =====================================================================
+# 靶点配置示例：EGFR 激酶域 × 厄洛替尼（PDB 1M17，共晶配体 AQ4）
+# 用途：框架验证 / redocking 质量门演示（新靶点复制本文件修改即可）
+# =====================================================================
+target:
+  name: EGFR_demo
+  pdb_id: 1M17
+  structure_path: null          # null=自动下载；本地 PDB 时填绝对路径
+  chains: [A]
+  reference_ligand:
+    resname: AQ4                # 共晶配体三字母码
+    chain: A
+  box:
+    mode: reference_ligand      # reference_ligand | fpocket | manual
+    padding: 5.0                # 配体外扩（Å）
+    min_box: 22.0
+    max_box: 30.0
+    # mode: manual 时生效
+    center: null                # [x, y, z]
+    size: null                  # [sx, sy, sz]
+
+gate:
+  # 质量门：共晶配体重对接需复现晶体姿势，否则禁止全库筛选
+  # 判据：打分 ≤ 最优 + score_window 的 pose 中，最小 RMSD < rmsd_threshold
+  rmsd_threshold: 2.0
+  score_window: 1.0
+  exhaustiveness: 32
+  num_modes: 9
+
+docking:
+  exhaustiveness: 8
+  num_modes: 9
+  score_threshold: -7.0         # 汇总过滤阈值（kcal/mol）
+  top_n: 50                     # 报告取 Top N
+  redock_seed: 20261010

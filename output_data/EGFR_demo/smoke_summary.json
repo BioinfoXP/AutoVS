@@ -1,0 +1,311 @@
+{
+  "screen": "smoke",
+  "n_docked": 50,
+  "n_hits_below_threshold": 31,
+  "score_threshold_kcal_mol": -7.0,
+  "best_score_kcal_mol": -9.55,
+  "top_n": [
+    {
+      "rank": 1,
+      "entry_id": "FDA03172_s1",
+      "name": "RISDIPLAM",
+      "top_score_kcal_mol": -9.55
+    },
+    {
+      "rank": 2,
+      "entry_id": "FDA02817_s1",
+      "name": "BUCLIZINE HYDROCHLORIDE",
+      "top_score_kcal_mol": -9.04
+    },
+    {
+      "rank": 3,
+      "entry_id": "FDA02408_s1",
+      "name": "VILAZODONE HYDROCHLORIDE",
+      "top_score_kcal_mol": -9.0
+    },
+    {
+      "rank": 4,
+      "entry_id": "FDA02258_s1",
+      "name": "ELAGOLIX",
+      "top_score_kcal_mol": -8.99
+    },
+    {
+      "rank": 5,
+      "entry_id": "FDA00749_s1",
+      "name": "METHYSERGIDE",
+      "top_score_kcal_mol": -8.96
+    },
+    {
+      "rank": 6,
+      "entry_id": "FDA02110_s1",
+      "name": "MEDRYSONE",
+      "top_score_kcal_mol": -8.78
+    },
+    {
+      "rank": 7,
+      "entry_id": "FDA00781_s1",
+      "name": "PRASTERONE",
+      "top_score_kcal_mol": -8.62
+    },
+    {
+      "rank": 8,
+      "entry_id": "FDA00624_s1",
+      "name": "DELAVIRDINE MESYLATE",
+      "top_score_kcal_mol": -8.43
+    },
+    {
+      "rank": 9,
+      "entry_id": "FDA01265_s1",
+      "name": "NALFURAFINE",
+      "top_score_kcal_mol": -8.36
+    },
+    {
+      "rank": 10,
+      "entry_id": "FDA00003_s1",
+      "name": "OFLOXACIN",
+      "top_score_kcal_mol": -8.33
+    },
+    {
+      "rank": 11,
+      "entry_id": "FDA00461_s1",
+      "name": "RESERPINE",
+      "top_score_kcal_mol": -8.3
+    },
+    {
+      "rank": 12,
+      "entry_id": "FDA02502_s1",
+      "name": "LEVOLEUCOVORIN CALCIUM",
+      "top_score_kcal_mol": -8.2
+    },
+    {
+      "rank": 13,
+      "entry_id": "FDA01394_s1",
+      "name": "PANOBINOSTAT",
+      "top_score_kcal_mol": -8.18
+    },
+    {
+      "rank": 14,
+      "entry_id": "FDA00307_s1",
+      "name": "SITAXENTAN",
+      "top_score_kcal_mol": -8.18
+    },
+    {
+      "rank": 15,
+      "entry_id": "FDA03179_s1",
+      "name": "OLUTASIDENIB",
+      "top_score_kcal_mol": -8.07
+    },
+    {
+      "rank": 16,
+      "entry_id": "FDA00015_s1",
+      "name": "FLUMAZENIL",
+      "top_score_kcal_mol": -7.89
+    },
+    {
+      "rank": 17,
+      "entry_id": "FDA00821_s1",
+      "name": "PENTAZOCINE",
+      "top_score_kcal_mol": -7.75
+    },
+    {
+      "rank": 18,
+      "entry_id": "FDA03035_s1",
+      "name": "PENTAZOCINE HYDROCHLORIDE",
+      "top_score_kcal_mol": -7.73
+    },
+    {
+      "rank": 19,
+      "entry_id": "FDA02622_s1",
+      "name": "PHOLCODINE",
+      "top_score_kcal_mol": -7.71
+    },
+    {
+      "rank": 20,
+      "entry_id": "FDA01368_s1",
+      "name": "CEFADROXIL",
+      "top_score_kcal_mol": -7.67
+    },
+    {
+      "rank": 21,
+      "entry_id": "FDA00081_s1",
+      "name": "SULFAMETHAZINE",
+      "top_score_kcal_mol": -7.43
+    },
+    {
+      "rank": 22,
+      "entry_id": "FDA01613_s1",
+      "name": "CEPHALEXIN HYDROCHLORIDE",
+      "top_score_kcal_mol": -7.42
+    },
+    {
+      "rank": 23,
+      "entry_id": "FDA00623_s1",
+      "name": "LONAFARNIB",
+      "top_score_kcal_mol": -7.34
+    },
+    {
+      "rank": 24,
+      "entry_id": "FDA00955_s1",
+      "name": "QUININE",
+      "top_score_kcal_mol": -7.29
+    },
+    {
+      "rank": 25,
+      "entry_id": "FDA00863_s1",
+      "name": "TETRABENAZINE",
+      "top_score_kcal_mol": -7.28
+    },
+    {
+      "rank": 26,
+      "entry_id": "FDA01052_s1",
+      "name": "NITAZOXANIDE",
+      "top_score_kcal_mol": -7.25
+    },
+    {
+      "rank": 27,
+      "entry_id": "FDA01474_s1",
+      "name": "METHYLENE BLUE",
+      "top_score_kcal_mol": -7.22
+    },
+    {
+      "rank": 28,
+      "entry_id": "FDA00503_s1",
+      "name": "DINOPROST",
+      "top_score_kcal_mol": -7.22
+    },
+    {
+      "rank": 29,
+      "entry_id": "FDA02604_s1",
+      "name": "EFINACONAZOLE",
+      "top_score_kcal_mol": -7.21
+    },
+    {
+      "rank": 30,
+      "entry_id": "FDA03014_s1",
+      "name": "DEXTROMORAMIDE",
+      "top_score_kcal_mol": -7.18
+    },
+    {
+      "rank": 31,
+      "entry_id": "FDA01678_s1",
+      "name": "PROMAZINE HYDROCHLORIDE",
+      "top_score_kcal_mol": -7.02
+    },
+    {
+      "rank": 32,
+      "entry_id": "FDA00272_s1",
+      "name": "MENADIONE",
+      "top_score_kcal_mol": -6.74
+    },
+    {
+      "rank": 33,
+      "entry_id": "FDA00762_s1",
+      "name": "FENFLURAMINE",
+      "top_score_kcal_mol": -6.61
+    },
+    {
+      "rank": 34,
+      "entry_id": "FDA03028_s1",
+      "name": "IBUPROFEN SODIUM",
+      "top_score_kcal_mol": -6.43
+    },
+    {
+      "rank": 35,
+      "entry_id": "FDA02567_s1",
+      "name": "PENCICLOVIR SODIUM",
+      "top_score_kcal_mol": -6.22
+    },
+    {
+      "rank": 36,
+      "entry_id": "FDA01238_s1",
+      "name": "MILNACIPRAN",
+      "top_score_kcal_mol": -6.18
+    },
+    {
+      "rank": 37,
+      "entry_id": "FDA00282_s1",
+      "name": "LOFEXIDINE",
+      "top_score_kcal_mol": -6.01
+    },
+    {
+      "rank": 38,
+      "entry_id": "FDA01411_s1",
+      "name": "IODOHIPPURATE",
+      "top_score_kcal_mol": -5.99
+    },
+    {
+      "rank": 39,
+      "entry_id": "FDA00083_s1",
+      "name": "PENTOBARBITAL",
+      "top_score_kcal_mol": -5.93
+    },
+    {
+      "rank": 40,
+      "entry_id": "FDA00439_s1",
+      "name": "NICORANDIL",
+      "top_score_kcal_mol": -5.87
+    },
+    {
+      "rank": 41,
+      "entry_id": "FDA01301_s1",
+      "name": "PENTOSTATIN",
+      "top_score_kcal_mol": -5.8
+    },
+    {
+      "rank": 42,
+      "entry_id": "FDA01896_s1",
+      "name": "PROCAINE HYDROCHLORIDE",
+      "top_score_kcal_mol": -5.75
+    },
+    {
+      "rank": 43,
+      "entry_id": "FDA02197_s1",
+      "name": "ACETRIZOIC ACID",
+      "top_score_kcal_mol": -5.74
+    },
+    {
+      "rank": 44,
+      "entry_id": "FDA03032_s1",
+      "name": "MAGNESIUM CITRATE",
+      "top_score_kcal_mol": -5.49
+    },
+    {
+      "rank": 45,
+      "entry_id": "FDA01155_s1",
+      "name": "ALLOPURINOL",
+      "top_score_kcal_mol": -5.21
+    },
+    {
+      "rank": 46,
+      "entry_id": "FDA00745_s1",
+      "name": "PREGABALIN",
+      "top_score_kcal_mol": -5.17
+    },
+    {
+      "rank": 47,
+      "entry_id": "FDA02481_s1",
+      "name": "SULFUR HEXAFLUORIDE",
+      "top_score_kcal_mol": -3.98
+    },
+    {
+      "rank": 48,
+      "entry_id": "FDA00462_s1",
+      "name": "GLYCINE",
+      "top_score_kcal_mol": -3.13
+    },
+    {
+      "rank": 49,
+      "entry_id": "FDA01944_s1",
+      "name": "POTASSIUM PHOSPHATE, MONOBASIC",
+      "top_score_kcal_mol": -2.98
+    },
+    {
+      "rank": 50,
+      "entry_id": "FDA02055_s1",
+      "name": "SODIUM IODIDE I 123",
+      "top_score_kcal_mol": -0.85
+    }
+  ],
+  "ranking_csv": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_data/EGFR_demo/smoke_ranking.csv",
+  "score_figure": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/EGFR_demo/smoke_score_distribution.pdf"
+}

@@ -1,0 +1,33 @@
+# =====================================================================
+# AutoVS 框架级配置（单一配置源：路径 / 工具 / 运行时）
+# 约定：所有路径使用绝对路径；修改后运行 `autovs doctor` 校验
+# =====================================================================
+framework:
+  name: AutoVS
+  version: "0.1.0"
+  seed: 20261010            # 全局随机种子（构象生成 / 抽样 / Vina）
+
+paths:
+  root: /home/xiap/bio_project/for_others/AutoMD/AutoVS
+  library_dir: /home/xiap/bio_project/for_others/AutoMD/AutoVS/data/fda_library
+  temp_dir: /home/xiap/bio_project/for_others/AutoMD/AutoVS/temp
+  output_data_dir: /home/xiap/bio_project/for_others/AutoMD/AutoVS/output_data
+  output_figure_dir: /home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure
+
+# 外部工具绝对路径（来自 gene-drug-automd 环境；见 ENVIRONMENT.md）
+tools:
+  python: /home/xiap/opt/gene-drug-automd/env/bin/python
+  vina: /home/xiap/opt/gene-drug-automd/env/bin/vina
+  mk_prepare_receptor: /home/xiap/opt/gene-drug-automd/env/bin/mk_prepare_receptor.py
+  mk_prepare_ligand: /home/xiap/opt/gene-drug-automd/env/bin/mk_prepare_ligand.py
+  mk_export: /home/xiap/opt/gene-drug-automd/env/bin/mk_export.py
+  obabel: /home/xiap/opt/gene-drug-automd/env/bin/obabel
+  fpocket: /home/xiap/opt/gene-drug-automd/env/bin/fpocket
+  pymol: /home/xiap/opt/gene-drug-automd/env/bin/pymol   # 可选；缺失时自动跳过 3D 渲染
+
+runtime:
+  workers: 30               # 并行 worker 数（36 核机器留 6 核给系统）
+  log_level: INFO
+  vina_threads: 1           # 每个 vina 进程的线程数（并行时保持 1）
+  request_timeout: 120      # 远程资源下载超时（秒）
+  request_retries: 3        # 远程下载重试次数

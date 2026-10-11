@@ -1,0 +1,31 @@
+# =====================================================================
+# 靶点配置模板：复制本文件为 <靶点名>.yaml 后填写
+# =====================================================================
+target:
+  name: <靶点名>
+  pdb_id: <PDB编号>
+  structure_path: null          # 本地 PDB 绝对路径（null = 按 pdb_id 自动下载）
+  chains: [<链ID>]
+  reference_ligand:
+    resname: <共晶配体三字母码>  # 无共晶配体时置 null 并将 box.mode 改为 fpocket
+    chain: <链ID>
+  box:
+    mode: reference_ligand      # reference_ligand | fpocket | manual
+    padding: 5.0
+    min_box: 22.0
+    max_box: 30.0
+    center: null
+    size: null
+
+gate:
+  rmsd_threshold: 2.0
+  score_window: 1.0
+  exhaustiveness: 32
+  num_modes: 9
+
+docking:
+  exhaustiveness: 8
+  num_modes: 9
+  score_threshold: -7.0
+  top_n: 50
+  redock_seed: 20261010

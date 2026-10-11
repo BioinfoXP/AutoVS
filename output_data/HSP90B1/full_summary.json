@@ -1,0 +1,311 @@
+{
+  "screen": "full",
+  "n_docked": 2814,
+  "n_hits_below_threshold": 1414,
+  "score_threshold_kcal_mol": -7.0,
+  "best_score_kcal_mol": -10.8,
+  "top_n": [
+    {
+      "rank": 1,
+      "entry_id": "FDA01521_s1",
+      "name": "MIDOSTAURIN",
+      "top_score_kcal_mol": -10.8
+    },
+    {
+      "rank": 2,
+      "entry_id": "FDA01978_s1",
+      "name": "DUTASTERIDE",
+      "top_score_kcal_mol": -10.44
+    },
+    {
+      "rank": 3,
+      "entry_id": "FDA00466_s1",
+      "name": "TADALAFIL",
+      "top_score_kcal_mol": -10.26
+    },
+    {
+      "rank": 4,
+      "entry_id": "FDA02840_s1",
+      "name": "ZAVEGEPANT",
+      "top_score_kcal_mol": -10.15
+    },
+    {
+      "rank": 5,
+      "entry_id": "FDA01707_s1",
+      "name": "DIHYDROERGOTAMINE MESYLATE",
+      "top_score_kcal_mol": -10.14
+    },
+    {
+      "rank": 6,
+      "entry_id": "FDA01467_s1",
+      "name": "DIHYDROERGOTAMINE",
+      "top_score_kcal_mol": -10.1
+    },
+    {
+      "rank": 7,
+      "entry_id": "FDA02832_s1",
+      "name": "UBROGEPANT",
+      "top_score_kcal_mol": -10.07
+    },
+    {
+      "rank": 8,
+      "entry_id": "FDA01701_s1",
+      "name": "BROMOCRIPTINE MESYLATE",
+      "top_score_kcal_mol": -10.01
+    },
+    {
+      "rank": 9,
+      "entry_id": "FDA00145_s1",
+      "name": "BROMOCRIPTINE",
+      "top_score_kcal_mol": -10.0
+    },
+    {
+      "rank": 10,
+      "entry_id": "FDA01918_s1",
+      "name": "TRIAMCINOLONE HEXACETONIDE",
+      "top_score_kcal_mol": -9.96
+    },
+    {
+      "rank": 11,
+      "entry_id": "FDA01202_s1",
+      "name": "FLUOCINONIDE",
+      "top_score_kcal_mol": -9.95
+    },
+    {
+      "rank": 12,
+      "entry_id": "FDA01825_s1",
+      "name": "AMCINONIDE",
+      "top_score_kcal_mol": -9.91
+    },
+    {
+      "rank": 13,
+      "entry_id": "FDA01237_s1",
+      "name": "NILOTINIB",
+      "top_score_kcal_mol": -9.91
+    },
+    {
+      "rank": 14,
+      "entry_id": "FDA00802_s1",
+      "name": "MIZOLASTINE",
+      "top_score_kcal_mol": -9.9
+    },
+    {
+      "rank": 15,
+      "entry_id": "FDA00744_s1",
+      "name": "FLUORESCEIN",
+      "top_score_kcal_mol": -9.9
+    },
+    {
+      "rank": 16,
+      "entry_id": "FDA02547_s1",
+      "name": "CICLESONIDE",
+      "top_score_kcal_mol": -9.87
+    },
+    {
+      "rank": 17,
+      "entry_id": "FDA02221_s1",
+      "name": "NILOTINIB HYDROCHLORIDE MONOHYDRATE",
+      "top_score_kcal_mol": -9.87
+    },
+    {
+      "rank": 18,
+      "entry_id": "FDA01350_s1",
+      "name": "TEMOPORFIN",
+      "top_score_kcal_mol": -9.84
+    },
+    {
+      "rank": 19,
+      "entry_id": "FDA02722_s1",
+      "name": "TEMAFLOXACIN HYDROCHLORIDE",
+      "top_score_kcal_mol": -9.84
+    },
+    {
+      "rank": 20,
+      "entry_id": "FDA00226_s1",
+      "name": "TEMAFLOXACIN",
+      "top_score_kcal_mol": -9.78
+    },
+    {
+      "rank": 21,
+      "entry_id": "FDA02128_s1",
+      "name": "CEFPIRAMIDE",
+      "top_score_kcal_mol": -9.76
+    },
+    {
+      "rank": 22,
+      "entry_id": "FDA01647_s1",
+      "name": "NANDROLONE PHENPROPIONATE",
+      "top_score_kcal_mol": -9.72
+    },
+    {
+      "rank": 23,
+      "entry_id": "FDA01917_s1",
+      "name": "FLUMETHASONE PIVALATE",
+      "top_score_kcal_mol": -9.69
+    },
+    {
+      "rank": 24,
+      "entry_id": "FDA01213_s1",
+      "name": "FLUNISOLIDE",
+      "top_score_kcal_mol": -9.64
+    },
+    {
+      "rank": 25,
+      "entry_id": "FDA01985_s1",
+      "name": "IDARUBICIN HYDROCHLORIDE",
+      "top_score_kcal_mol": -9.64
+    },
+    {
+      "rank": 26,
+      "entry_id": "FDA00812_s1",
+      "name": "IDARUBICIN",
+      "top_score_kcal_mol": -9.64
+    },
+    {
+      "rank": 27,
+      "entry_id": "FDA02600_s1",
+      "name": "LUMACAFTOR",
+      "top_score_kcal_mol": -9.58
+    },
+    {
+      "rank": 28,
+      "entry_id": "FDA01788_s1",
+      "name": "CEFPIRAMIDE SODIUM",
+      "top_score_kcal_mol": -9.57
+    },
+    {
+      "rank": 29,
+      "entry_id": "FDA01058_s1",
+      "name": "NETUPITANT",
+      "top_score_kcal_mol": -9.57
+    },
+    {
+      "rank": 30,
+      "entry_id": "FDA00685_s1",
+      "name": "FLUOCINOLONE ACETONIDE",
+      "top_score_kcal_mol": -9.55
+    },
+    {
+      "rank": 31,
+      "entry_id": "FDA00401_s1",
+      "name": "PIPERACILLIN",
+      "top_score_kcal_mol": -9.54
+    },
+    {
+      "rank": 32,
+      "entry_id": "FDA01883_s1",
+      "name": "PIPERACILLIN SODIUM",
+      "top_score_kcal_mol": -9.52
+    },
+    {
+      "rank": 33,
+      "entry_id": "FDA02528_s1",
+      "name": "ENTRECTINIB",
+      "top_score_kcal_mol": -9.51
+    },
+    {
+      "rank": 34,
+      "entry_id": "FDA00104_s1",
+      "name": "KETANSERIN",
+      "top_score_kcal_mol": -9.49
+    },
+    {
+      "rank": 35,
+      "entry_id": "FDA02821_s1",
+      "name": "COBIMETINIB FUMARATE",
+      "top_score_kcal_mol": -9.49
+    },
+    {
+      "rank": 36,
+      "entry_id": "FDA02772_s1",
+      "name": "COBIMETINIB",
+      "top_score_kcal_mol": -9.48
+    },
+    {
+      "rank": 37,
+      "entry_id": "FDA02282_s1",
+      "name": "LURASIDONE",
+      "top_score_kcal_mol": -9.47
+    },
+    {
+      "rank": 38,
+      "entry_id": "FDA01207_s1",
+      "name": "TRIAMCINOLONE ACETONIDE",
+      "top_score_kcal_mol": -9.45
+    },
+    {
+      "rank": 39,
+      "entry_id": "FDA01997_s1",
+      "name": "CARBENICILLIN INDANYL SODIUM",
+      "top_score_kcal_mol": -9.44
+    },
+    {
+      "rank": 40,
+      "entry_id": "FDA01079_s1",
+      "name": "PIMOZIDE",
+      "top_score_kcal_mol": -9.44
+    },
+    {
+      "rank": 41,
+      "entry_id": "FDA00072_s1",
+      "name": "ERGOTAMINE",
+      "top_score_kcal_mol": -9.43
+    },
+    {
+      "rank": 42,
+      "entry_id": "FDA01321_s1",
+      "name": "CARBENICILLIN INDANYL",
+      "top_score_kcal_mol": -9.42
+    },
+    {
+      "rank": 43,
+      "entry_id": "FDA02844_s1",
+      "name": "ERGOTAMINE TARTRATE",
+      "top_score_kcal_mol": -9.41
+    },
+    {
+      "rank": 44,
+      "entry_id": "FDA00715_s1",
+      "name": "TELMISARTAN",
+      "top_score_kcal_mol": -9.41
+    },
+    {
+      "rank": 45,
+      "entry_id": "FDA02849_s1",
+      "name": "NALDEMEDINE TOSYLATE",
+      "top_score_kcal_mol": -9.39
+    },
+    {
+      "rank": 46,
+      "entry_id": "FDA02399_s1",
+      "name": "PYRANTEL PAMOATE",
+      "top_score_kcal_mol": -9.39
+    },
+    {
+      "rank": 47,
+      "entry_id": "FDA02254_s1",
+      "name": "DEFLAZACORT",
+      "top_score_kcal_mol": -9.39
+    },
+    {
+      "rank": 48,
+      "entry_id": "FDA02669_s1",
+      "name": "NALDEMEDINE",
+      "top_score_kcal_mol": -9.39
+    },
+    {
+      "rank": 49,
+      "entry_id": "FDA02550_s1",
+      "name": "LIFITEGRAST",
+      "top_score_kcal_mol": -9.36
+    },
+    {
+      "rank": 50,
+      "entry_id": "FDA01133_s1",
+      "name": "ATOVAQUONE",
+      "top_score_kcal_mol": -9.36
+    }
+  ],
+  "ranking_csv": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_data/HSP90B1/full_ranking.csv",
+  "score_figure": "/home/xiap/bio_project/for_others/AutoMD/AutoVS/output_figure/HSP90B1/full_score_distribution.pdf"
+}

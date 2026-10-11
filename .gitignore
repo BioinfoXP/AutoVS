@@ -1,0 +1,25 @@
+# ---- 中间产物与缓存（可再生） ----
+temp/
+logs/
+*.log
+*.qs
+
+# ---- FDA 库预处理结构（36M，可由索引+prepare 重建） ----
+data/fda_library/prepared/
+data/fda_library/raw/
+
+# ---- Python ----
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+.venv/
+venv/
+
+# ---- IDE / 系统 ----
+.idea/
+.vscode/
+.DS_Store
