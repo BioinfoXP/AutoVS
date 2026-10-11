@@ -2,10 +2,31 @@
 
 **AutoVS** 是一套面向药物重定位的 **FDA 已上市药物库批量虚拟筛选框架**：从 FDA 库本地化、受体准备、redocking 质量门，到 AutoDock Vina 批量对接、出版级 3D/2D 可视化与 Markdown 任务报告，全流程一条命令完成，并可通过 **MCP server** 交给任意 AI 客户端（Trae / Claude / Cursor）自主驱动。
 
+```mermaid
+flowchart LR
+    A["FDA 库本地化<br/>ChEMBL REST + RDKit 标准化"] --> B["受体准备<br/>清洗 + 加氢"]
+    B --> C{"质量门<br/>共晶重对接"}
+    C -- "窗口内最小 RMSD < 2Å" --> D["批量对接 3,282 药<br/>并行 · 断点续跑"]
+    C -- "FAIL" -.-> B
+    D --> E["汇总排行<br/>CSV + 打分分布"]
+    E --> F["自动可视化<br/>3D 口袋图 · 2D 相互作用图<br/>3D|2D 对照图"]
+    F --> G["Markdown 任务报告"]
+    G -.-> H["MCP server<br/>AI 客户端自然语言驱动"]
 ```
-FDA 库本地化 ──► 受体准备 ──► 质量门(redocking) ──► 批量对接 ──► 汇总排行 ──► 自动可视化 ──► 任务报告
-  (ChEMBL REST)    (清洗+加氢)    (RMSD<2Å 才放行)     (断点续跑)     (CSV+分布图)   (3D+2D+对照图)    (Markdown)
-```
+
+> **零基础？请从[图文教程](docs/tutorial.md)开始**——30 分钟从裸机到出第一份报告，每个输出都有逐元素解读。
+
+## 效果预览（真实筛选产物）
+
+每张对照图左边 3D 口袋、右边 2D 相互作用，残基一一对应。下图为 HSP90B1（GRP94）全库 3,282 药筛选的 Top1 命中（MIDOSTAURIN，-10.8 kcal/mol）：
+
+![MIDOSTAURIN 3D|2D 对照图](output_figure/HSP90B1/full/pose_R01_MIDOSTAURIN_pair.png)
+
+2D 相互作用图细节（深绿=氢键残基、浅绿=疏水、粉紫=π 堆积、红=盐桥，虚线连到配体具体参与原子）：
+
+![MIDOSTAURIN 2D 相互作用图](output_figure/HSP90B1/full/pose_R01_MIDOSTAURIN_2d.png)
+
+完整任务报告示例：[output_figure/HSP90B1/full/report.md](output_figure/HSP90B1/full/report.md)。
 
 ## 功能特性
 
@@ -192,6 +213,7 @@ temp/                                 中间产物（受体/对接工作目录�
 
 ## 文档索引
 
+- [从零上手教程（环境搭建/首个筛选/输出解读/FAQ）](docs/tutorial.md) ← 新用户从这里开始
 - [框架架构与模块说明](docs/framework.md)
 - [FDA 库本地化改造说明](docs/fda_library_localization.md)
 - [验证测试报告（质量门/冒烟/断点续跑）](docs/validation_report.md)
