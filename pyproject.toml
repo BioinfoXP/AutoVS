@@ -5,9 +5,17 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "autovs"
 version = "0.1.0"
-description = "AutoVS：FDA 已上市药物库本地化批量虚拟筛选框架（Vina 对接）"
+description = "AutoVS：FDA 已上市药物库本地化批量虚拟筛选框架（Vina 对接 / 3D-2D 可视化 / 任务报告 / MCP server）"
 readme = "README.md"
 requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "BioinfoXP" }]
+keywords = ["virtual-screening", "autodock-vina", "fda-drugs", "drug-repurposing", "molecular-docking"]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Programming Language :: Python :: 3.11",
+]
 # 依赖与 conda 环境 gene-drug-automd 对齐（见 environment.yml）
 dependencies = [
     "pyyaml>=6.0",
