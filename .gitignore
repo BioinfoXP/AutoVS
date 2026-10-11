@@ -4,6 +4,11 @@ logs/
 *.log
 *.qs
 
+# ---- 本地研究靶点数据（不入库） ----
+output_data/HSP90B1/
+output_figure/HSP90B1/
+config/targets/hsp90b1_7ull.yaml
+
 # ---- FDA 库预处理结构（36M，可由索引+prepare 重建） ----
 data/fda_library/prepared/
 data/fda_library/raw/

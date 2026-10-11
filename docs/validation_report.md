@@ -105,4 +105,4 @@ autovs dock --target config/targets/demo_egfr_1m17.yaml            # 全库 3,28
 | 自动化接线 | `autovs dock` 末尾自动调用 | `cmd_dock` 成功触发 `run_visualize()`（异常仅告警） |
 | 回归测试 | `pytest tests/` | 13 passed |
 
-已知限制：2D 几何判据为快速检视用途，定量结论需结合 3D 目视复核；HSP90B1 全库对接完成后由后台 watcher 自动产出同类图件（`temp/viz_hsp90b1_full.log`）。
+已知限制：2D 几何判据为快速检视用途，定量结论需结合 3D 目视复核；大规模全库对接结果可由同一管线自动产出同类图件与报告。

@@ -119,22 +119,22 @@ AI 返回 vina/pymol/库条数即接入成功。
 
 ### 场景 A：从零跑一个新靶点
 
-> **你**："用 AutoVS 检查一下环境，然后给 PDB 7ULL（HSP90B1，链 A，共晶配体 42C）建个靶点配置，跑质量门，PASS 了就全库筛选，批次叫 full。"
+> **你**："用 AutoVS 检查一下环境，然后给 PDB 1M17（EGFR，链 A，共晶配体 AQ4）建个靶点配置，跑质量门，PASS 了就全库筛选，批次叫 screen。"
 
-AI 的动作链：`doctor` → 创建 `config/targets/hsp90b1_7ull.yaml`（按仓库模板）→ `run_gate` → PASS 后 `submit_dock(tag="full")` → 用 `dock_status` 定期向你汇报进度。
+AI 的动作链：`doctor` → 创建 `config/targets/egfr_1m17.yaml`（按仓库模板）→ `run_gate` → PASS 后 `submit_dock(tag="screen")` → 用 `dock_status` 定期向你汇报进度。
 
 ### 场景 B：查进度（对接中另开对话）
 
-> **你**："HSP90B1 的 full 批次跑到哪了？"
+> **你**："EGFR 那个 screen 批次跑到哪了？"
 
-AI 调 `dock_status(target_yaml=..., tag="full")`，回你"已完成 2854/3282，进程存活，最近日志 …"。
+AI 调 `dock_status(target_yaml=..., tag="screen")`，回你"已完成 1520/3282，进程存活，最近日志 …"。
 
 ### 场景 C：看结果
 
 > **你**："现在 Top 20 是哪些？只看低于 -7 的。"
-> **你**："把第一名和 tadalafil 的结合模式图画出来。"
+> **你**："把第一名和 erlotinib 的结合模式图画出来。"
 
-AI 调 `query_ranking(top_n=20, below_threshold_only=true)` 和 `visualize(entries="MIDOSTAURIN,tadalafil")`，并告诉你图在 `output_figure/HSP90B1/full/pose_R01_MIDOSTAURIN_pair.png`。
+AI 调 `query_ranking(top_n=20, below_threshold_only=true)` 和 `visualize(entries="RISDIPLAM,erlotinib")`，并告诉你图在 `output_figure/EGFR_demo/screen/pose_R01_RISDIPLAM_pair.png`。
 
 ### 场景 D：出交付物
 

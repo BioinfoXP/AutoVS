@@ -123,7 +123,7 @@ output_data/EGFR_1M17/smoke_ranking.csv        ← 排行榜
 
 **看到 report.md 就代表全流程通了。** 接下来换成你自己的靶点（第 4 节），或直接全量筛选（第 5 节）。
 
-> HSP90B1（GRP94）全库真实筛选结果已随仓库附带，见 `output_figure/HSP90B1/full/report.md`，可直接当"满分答案"对照。
+> 仓库自带的 demo 报告在 `output_figure/EGFR_demo/smoke/report.md`，可直接当"参考答案"对照。
 
 ---
 
@@ -133,9 +133,9 @@ output_data/EGFR_1M17/smoke_ranking.csv        ← 排行榜
 
 去 [RCSB PDB](https://www.rcsb.org/) 搜你的靶蛋白，选一个**共晶结构**（有结合配体的），记下三样东西：
 
-1. **PDB ID**（如 `7ULL`）
+1. **PDB ID**（如 `1M17`）
 2. **链**（如 `A`）
-3. **共晶配体三字母码**（PDB 页面右侧 "Ligands" 处，如 `42C`）
+3. **共晶配体三字母码**（PDB 页面右侧 "Ligands" 处，如 `AQ4`）
 
 ### 4.2 写靶点配置
 
@@ -148,10 +148,10 @@ cp config/targets/template.yaml config/targets/my_target.yaml
 ```yaml
 target:
   name: MYTARGET            # ① 靶点名（决定输出目录名）
-  pdb_id: 7ULL              # ② PDB 编号（自动下载并缓存）
+  pdb_id: 1M17              # ② PDB 编号（自动下载并缓存）
   chains: [A]               # ③ 对接哪条链
   reference_ligand:
-    resname: 42C            # ④ 共晶配体三字母码
+    resname: AQ4            # ④ 共晶配体三字母码
 ```
 
 盒子不用手算：`box.mode: reference_ligand` 会让程序以共晶配体质心为中心、外扩 `padding: 5.0` Å 自动生成对接盒（尺寸钳制在 `min_box`~`max_box`）。如果你的配体不是口袋探针（例如是别构脂质），才需要手动填 `center`/`size`。
@@ -220,9 +220,9 @@ autovs dock --target config/targets/my_target.yaml --tag screen          # 全�
 - **3D 半边**：天蓝半透明 cartoon = 蛋白骨架；紫/黄 stick = 配体与口袋残基；绿色虚线 = 氢键；黑体文字 = 残基标签（下划线连到残基位置）
 - **2D 半边**：中心键线式 = 配体；环绕椭圆 = 相互作用残基——**深绿实心 = 氢键、浅绿 = 疏水、粉紫 = π 堆积/阳离子-π、红 = 盐桥**；虚线连到配体具体参与原子
 
-真实例子（HSP90B1 全库 Top1，MIDOSTAURIN，-10.8 kcal/mol）：
+真实例子（demo 靶点 EGFR 1M17 冒烟筛选 Top1，RISDIPLAM）：
 
-![MIDOSTAURIN 3D|2D 对照图](../output_figure/HSP90B1/full/pose_R01_MIDOSTAURIN_pair.png)
+![RISDIPLAM 3D|2D 对照图](../output_figure/EGFR_demo/smoke/pose_R01_RISDIPLAM_pair.png)
 
 同一张图里可以同时读：3D 空间摆放（LYS114/ASP149 在口袋哪个方向）+ 2D 作用类型（哪些是氢键哪些是疏水）。
 
@@ -266,7 +266,7 @@ autovs visualize --target config/targets/my_target.yaml --tag screen \
 
 重启客户端后即可自然语言驱动，例如：
 
-> "用 AutoVS 给 7ULL 这个靶点跑一遍虚拟筛选，先跑质量门，PASS 后全量筛，完成后给我 Top 10 的对照图和报告。"
+> "用 AutoVS 给 1M17 这个靶点（EGFR，链 A，共晶配体 AQ4）跑一遍虚拟筛选，先跑质量门，PASS 后全量筛，完成后给我 Top 10 的对照图和报告。"
 
 AI 会依次调用 `doctor → run_gate → submit_dock → dock_status(轮询) → visualize → generate_report`。对接这种小时级任务走后台提交模式，AI 查进度用的是"数结果文件"的真实进度，server 重启也不丢任务。
 

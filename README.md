@@ -18,15 +18,15 @@ flowchart LR
 
 ## 效果预览（真实筛选产物）
 
-每张对照图左边 3D 口袋、右边 2D 相互作用，残基一一对应。下图为 HSP90B1（GRP94）全库 3,282 药筛选的 Top1 命中（MIDOSTAURIN，-10.8 kcal/mol）：
+每张对照图左边 3D 口袋、右边 2D 相互作用，残基一一对应。下图为 demo 靶点（EGFR 激酶域 × 共晶配体 AQ4，PDB 1M17）20 化合物冒烟筛选的 Top1 命中（RISDIPLAM）：
 
-![MIDOSTAURIN 3D|2D 对照图](output_figure/HSP90B1/full/pose_R01_MIDOSTAURIN_pair.png)
+![RISDIPLAM 3D|2D 对照图](output_figure/EGFR_demo/smoke/pose_R01_RISDIPLAM_pair.png)
 
 2D 相互作用图细节（深绿=氢键残基、浅绿=疏水、粉紫=π 堆积、红=盐桥，虚线连到配体具体参与原子）：
 
-![MIDOSTAURIN 2D 相互作用图](output_figure/HSP90B1/full/pose_R01_MIDOSTAURIN_2d.png)
+![RISDIPLAM 2D 相互作用图](output_figure/EGFR_demo/smoke/pose_R01_RISDIPLAM_2d.png)
 
-完整任务报告示例：[output_figure/HSP90B1/full/report.md](output_figure/HSP90B1/full/report.md)。
+完整任务报告示例：[output_figure/EGFR_demo/smoke/report.md](output_figure/EGFR_demo/smoke/report.md)。
 
 ## 功能特性
 
