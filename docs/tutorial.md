@@ -262,6 +262,8 @@ autovs visualize --target config/targets/my_target.yaml --tag screen \
 }
 ```
 
+> 各客户端的配置文件位置、10 个工具逐个详解、更多实战话术与排错表，见 **[MCP 指南](mcp_guide.md)**。
+
 重启客户端后即可自然语言驱动，例如：
 
 > "用 AutoVS 给 7ULL 这个靶点跑一遍虚拟筛选，先跑质量门，PASS 后全量筛，完成后给我 Top 10 的对照图和报告。"

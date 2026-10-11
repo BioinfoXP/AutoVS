@@ -171,6 +171,8 @@ autovs mcp                            启动 MCP server（stdio）
 }
 ```
 
+> **详细配置步骤（各客户端配置文件位置）、10 个工具逐个详解、实战话术示例与排错表，见 [MCP 指南](docs/mcp_guide.md)。**
+
 | 工具 | 功能 |
 |---|---|
 | `doctor` / `library_stats` / `library_search` | 环境体检 / 库统计 / 搜库 |
@@ -214,6 +216,7 @@ temp/                                 中间产物（受体/对接工作目录�
 ## 文档索引
 
 - [从零上手教程（环境搭建/首个筛选/输出解读/FAQ）](docs/tutorial.md) ← 新用户从这里开始
+- [MCP 指南（配置/工具详解/实战话术/排错）](docs/mcp_guide.md)
 - [框架架构与模块说明](docs/framework.md)
 - [FDA 库本地化改造说明](docs/fda_library_localization.md)
 - [验证测试报告（质量门/冒烟/断点续跑）](docs/validation_report.md)
