@@ -59,7 +59,7 @@ MCP server 以 **stdio 子进程**方式运行：AI 客户端负责拉起 `pytho
 {
   "mcpServers": {
     "autovs": {
-      "command": "/home/you/opt/gene-drug-automd/env/bin/python",
+      "command": "/home/you/miniconda3/envs/autovs/bin/python",
       "args": ["-m", "autovs.mcp_server"],
       "cwd": "/home/you/AutoVS"
     }

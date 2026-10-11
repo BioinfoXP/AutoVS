@@ -10,7 +10,7 @@ AutoVS（Automated Virtual Screening）是 FDA 已上市药物库本地化批量
 
 | 层 | 选型 | 理由 |
 |---|---|---|
-| 语言 | Python 3.11 | 与现有 `gene-drug-automd` 环境一致，化学信息学生态最全 |
+| 语言 | Python 3.11 | `autovs` conda 环境，化学信息学生态最全 |
 | 配置 | YAML + 标准库 dataclass | 无额外依赖、类型化、可校验；配置即单一事实源 |
 | 分子处理 | RDKit 2025.09 | 3D 构象（ETKDGv3 + MMFF94）、标准化（MolStandardize）、RMSD |
 | 质子化 | dimorphite-dl 2.1 | pH 7.4 生理状态枚举，与 automd 方法学一致 |
@@ -27,7 +27,7 @@ AutoVS（Automated Virtual Screening）是 FDA 已上市药物库本地化批量
 ```
 AutoVS/
 ├── pyproject.toml          # 依赖声明 + CLI 入口（autovs）
-├── environment.yml         # conda 环境复现（与 gene-drug-automd 对齐）
+├── environment.yml         # conda 环境复现（autovs 环境）
 ├── config/                 # ★ 配置体系（单一配置源）
 │   ├── framework.yaml      #   框架级：路径 / 工具 / 运行时
 │   ├── library.yaml        #   库级：数据源 / 本地化参数

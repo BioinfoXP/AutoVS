@@ -63,13 +63,13 @@ AutoVS 通过**绝对路径**调用外部工具，全部路径集中在 `config/
 
 ```yaml
 tools:
-  python: /home/you/opt/gene-drug-automd/env/bin/python
-  vina: /home/you/opt/gene-drug-automd/env/bin/vina
-  mk_prepare_receptor: /home/you/opt/gene-drug-automd/env/bin/mk_prepare_receptor.py
-  mk_prepare_ligand: /home/you/opt/gene-drug-automd/env/bin/mk_prepare_ligand.py
-  mk_export: /home/you/opt/gene-drug-automd/env/bin/mk_export.py
-  obabel: /home/you/opt/gene-drug-automd/env/bin/obabel
-  pymol: /home/you/opt/gene-drug-automd/env/bin/pymol
+  python: /home/you/miniconda3/envs/autovs/bin/python
+  vina: /home/you/miniconda3/envs/autovs/bin/vina
+  mk_prepare_receptor: /home/you/miniconda3/envs/autovs/bin/mk_prepare_receptor.py
+  mk_prepare_ligand: /home/you/miniconda3/envs/autovs/bin/mk_prepare_ligand.py
+  mk_export: /home/you/miniconda3/envs/autovs/bin/mk_export.py
+  obabel: /home/you/miniconda3/envs/autovs/bin/obabel
+  pymol: /home/you/miniconda3/envs/autovs/bin/pymol
 ```
 
 同时把 `paths:` 段的 `root` 改为你的 AutoVS 克隆路径。
@@ -83,10 +83,10 @@ autovs doctor
 预期输出（全部 OK 即就绪）：
 
 ```
-python: /home/you/opt/gene-drug-automd/env/bin/python
-vina: OK /home/you/opt/gene-drug-automd/env/bin/vina
-pymol: OK /home/you/opt/gene-drug-automd/env/bin/pymol
-mk_prepare_receptor: OK /home/you/opt/gene-drug-automd/env/bin/mk_prepare_receptor.py
+python: /home/you/miniconda3/envs/autovs/bin/python
+vina: OK /home/you/miniconda3/envs/autovs/bin/vina
+pymol: OK /home/you/miniconda3/envs/autovs/bin/pymol
+mk_prepare_receptor: OK /home/you/miniconda3/envs/autovs/bin/mk_prepare_receptor.py
 fda_library: 3282 entries
 vina_version: AutoDock Vina v1.2.5
 ```
