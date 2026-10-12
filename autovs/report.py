@@ -81,7 +81,13 @@ def generate_report(cfg: Config, tag: str, top_show: int = 20) -> Path:
     ap(f"| 对接参数 | exhaustiveness={cfg.docking.exhaustiveness}, num_modes={cfg.docking.num_modes}, seed={cfg.docking.redock_seed} |")
     ap(f"| 筛选库 | FDA 已上市药物（ChEMBL max_phase=4 本地化索引）|")
     if gate:
-        ap(f"| 质量门（共晶重对接）| **{'PASS' if gate.get('passed') else 'FAIL'}**：打分窗口 {gate.get('score_window')} kcal/mol 内最小 RMSD = "
+        if gate.get("passed"):
+            gate_txt = "**PASS**"
+        elif gate.get("waived"):
+            gate_txt = f"**FAIL（已豁免放行）**：{gate.get('waive_reason', '')}"
+        else:
+            gate_txt = "**FAIL**"
+        ap(f"| 质量门（共晶重对接）| {gate_txt}：打分窗口 {gate.get('score_window')} kcal/mol 内最小 RMSD = "
            f"**{gate.get('redocking_rmsd')} Å**（阈值 < {gate.get('rmsd_threshold')} Å；top-1 pose RMSD {gate.get('top_pose_rmsd')} Å）|")
     ap(f"| 命中阈值 | {threshold} kcal/mol |")
     ap("")

@@ -60,7 +60,8 @@ AutoVS/
 | `autovs/aggregate.py` | 汇总排序、阈值过滤、打分分布图（含失败/预过滤计数） | `aggregate_results()` |
 | `autovs/visualize.py` | Top 命中自动可视化：PyMOL 3D 渲染 + DS 风格 2D 相互作用图 | `run_visualize()` / `detect_interactions()` |
 | `autovs/report.py` | Markdown 任务报告（概览/质量门/统计/排行/图谱对照）+ 全量排行 CSV 副本 | `generate_report()` |
-| `autovs/mcp_server.py` | MCP server：全流程 10 工具暴露给 AI 客户端（stdio） | `autovs mcp` / `python -m autovs.mcp_server` |
+| `autovs/packaging.py` | 任务自包含目录 zip 打包（交付包，dock 链路末尾自动执行） | `package_task()` |
+| `autovs/mcp_server.py` | MCP server：全流程 11 工具暴露给 AI 客户端（stdio） | `autovs mcp` / `python -m autovs.mcp_server` |
 | `autovs/cli.py` | 统一命令行入口 | `autovs <command>` |
 | `autovs/utils.py` | 日志 / 子进程 / JSON / 配置指纹 | `run_cmd()` / `config_hash()` |
 

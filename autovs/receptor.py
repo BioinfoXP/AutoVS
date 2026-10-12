@@ -61,23 +61,41 @@ def extract_reference_ligand(pdb_path: Path, resname: str, chain: str, out_dir: 
         raise ReceptorError("RDKit 无法读取共晶配体坐标")
 
     # CCD 模板补键级（与 automd.prepare_reference_ligand 同法）
+    # 硬约束：模板不可用必须报错——静默跳过会让距离猜键的垃圾键级进入对接（环变可旋转、
+    # 芳香性丢失、加氢坐标出原点），实测导致质量门 RMSD 全废
     import requests
     ccd = ensure_dir(out_dir) / f"{resname}_ccd.sdf"
     if not ccd.exists():
-        resp = requests.get(f"https://files.rcsb.org/ligands/download/{resname}.sdf", timeout=60)
-        if resp.status_code == 200:
-            ccd.write_bytes(resp.content)
-    if ccd.exists():
-        template = next((m for m in Chem.SDMolSupplier(str(ccd), removeHs=False) if m), None)
-        if template is not None:
-            try:
-                bound = AllChem.AssignBondOrdersFromTemplate(Chem.RemoveHs(template), Chem.RemoveHs(bound))
-                Chem.SanitizeMol(bound)
-            except Exception as exc:
-                raise ReceptorError(f"CCD 模板键级分配失败: {exc}") from exc
+        try:
+            resp = requests.get(f"https://files.rcsb.org/ligands/download/{resname}.sdf", timeout=60)
+            if resp.status_code == 200:
+                ccd.write_bytes(resp.content)
+        except requests.RequestException:
+            pass
+    if not ccd.exists():
+        raise ReceptorError(
+            f"CCD 模板 {resname} 不可用（下载失败且无本地缓存）。"
+            f"请手动放置 {resname}.sdf 至 {ccd} 后重试")
+    template = next((m for m in Chem.SDMolSupplier(str(ccd), removeHs=False) if m), None)
+    if template is None:
+        raise ReceptorError(f"CCD 模板文件无效: {ccd}")
+    try:
+        bound = AllChem.AssignBondOrdersFromTemplate(Chem.RemoveHs(template), Chem.RemoveHs(bound))
+        Chem.SanitizeMol(bound)
+    except Exception as exc:
+        raise ReceptorError(f"CCD 模板键级分配失败: {exc}") from exc
 
     out = out_dir / "reference_ligand_bound.sdf"
     bound_h = Chem.AddHs(bound, addCoords=True)  # Meeko 要求显式氢
+    # RDKit 隐性坑：AddHs(addCoords=True) 偶发个别 H 落在坐标原点，
+    # 幽灵氢进入 pdbqt 会破坏 Vina 内坐标（实测致质量门 RMSD 全废），此处强制重排
+    conf_h = bound_h.GetConformer()
+    for idx in range(bound_h.GetNumAtoms()):
+        p = conf_h.GetAtomPosition(idx)
+        if abs(p.x) + abs(p.y) + abs(p.z) < 1e-6:
+            nbr = bound_h.GetAtomWithIdx(idx).GetNeighbors()[0].GetIdx()
+            Chem.rdmolops.SetTerminalAtomCoords(bound_h, idx, nbr)
+            log.warning("共晶配体加氢坐标异常(原点)，已重排原子 %d", idx)
     bound_h.SetProp("_Name", f"{resname}_bound")
     writer = Chem.SDWriter(str(out))
     writer.write(bound_h)

@@ -135,9 +135,11 @@ def cmd_dock(args) -> int:
             log.error("未找到质量门结果，请先运行: autovs gate --target %s", args.target)
             return 2
         gate = read_json(gate_file)
-        if not gate.get("passed"):
+        if not gate.get("passed") and not gate.get("waived"):
             log.error("质量门未通过（RMSD=%s Å），禁止批量对接", gate.get("redocking_rmsd"))
             return 2
+        if not gate.get("passed") and gate.get("waived"):
+            log.warning("质量门 FAIL 已豁免放行：%s", gate.get("waive_reason", "（未注明原因）"))
         center, size = gate["box"]["center"], gate["box"]["size"]
     else:
         ref = prepare_reference(cfg)
@@ -171,6 +173,14 @@ def cmd_dock(args) -> int:
         print(f"任务报告: {rpt}")
     except Exception as exc:
         log.warning("自动报告跳过（%s: %s）；可稍后手动执行 autovs report", type(exc).__name__, exc)
+
+    # 自动打包：任务自包含目录 -> zip 交付包（失败不影响主流程）
+    try:
+        from .packaging import package_task
+        pkg = package_task(cfg, args.tag or "screen")
+        print(f"任务打包: {pkg['zip']}（{pkg['n_files']} 文件, {pkg['size_mb']} MB）")
+    except Exception as exc:
+        log.warning("自动打包跳过（%s: %s）；可稍后手动执行 autovs package", type(exc).__name__, exc)
     return 0
 
 
@@ -185,6 +195,16 @@ def cmd_visualize(args) -> int:
         print(f"  3D: {p}")
     for item in viz["2d_items"]:
         print(f"  2D: rank {item['rank']} {item['name']} -> {item['pdf']}")
+    return 0
+
+
+# ---------------- package ----------------
+def cmd_package(args) -> int:
+    from .packaging import package_task
+
+    cfg = _load(args)
+    r = package_task(cfg, args.tag, out=Path(args.out) if args.out else None)
+    print(f"任务打包: {r['zip']}（{r['n_files']} 文件, {r['size_mb']} MB）")
     return 0
 
 
@@ -245,6 +265,11 @@ def main(argv: list[str] | None = None) -> int:
     p_rpt.add_argument("--tag", default="screen", help="结果批次标签（与 dock 一致）")
     p_rpt.add_argument("--top", type=int, default=20, help="报告中展示的 Top N 行数")
 
+    p_pkg = sub.add_parser("package", help="任务自包含目录打包为 zip 交付包")
+    p_pkg.add_argument("--target", required=True, help="targets/*.yaml 路径")
+    p_pkg.add_argument("--tag", default="screen", help="结果批次标签（与 dock 一致）")
+    p_pkg.add_argument("--out", default=None, help="zip 输出路径（默认 output_figure/<靶点>/<靶点>_<批次>_results_<日期>.zip）")
+
     sub.add_parser("mcp", help="启动 MCP server（stdio，供 AI 客户端接入虚拟筛选全流程）")
 
     args = parser.parse_args(argv)
@@ -264,6 +289,7 @@ def main(argv: list[str] | None = None) -> int:
         "dock": cmd_dock,
         "visualize": cmd_visualize,
         "report": cmd_report,
+        "package": cmd_package,
         "mcp": cmd_mcp,
     }
     try:

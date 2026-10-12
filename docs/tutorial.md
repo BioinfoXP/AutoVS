@@ -267,7 +267,7 @@ autovs visualize --target config/targets/my_target.yaml --tag screen \
 }
 ```
 
-> 各客户端的配置文件位置、10 个工具逐个详解、更多实战话术与排错表，见 **[MCP 指南](mcp_guide.md)**。
+> 各客户端的配置文件位置、11 个工具逐个详解、更多实战话术与排错表，见 **[MCP 指南](mcp_guide.md)**。
 
 重启客户端后即可自然语言驱动，例如：
 

@@ -16,7 +16,7 @@ MCP（Model Context Protocol）是 AI 客户端（Trae / Claude Desktop / Cursor
 # 在 AutoVS 的 Python 环境里装 MCP SDK（注意必须 <2，2.x 改名不兼容）
 pip install "mcp>=1.30,<2"        # 安装本体时也可带上：pip install -e ".[mcp]"
 
-# 验证：能列出 10 个工具即 OK
+# 验证：能列出 11 个工具即 OK
 python -c "import autovs.mcp_server; print('OK')"
 ```
 
@@ -73,7 +73,7 @@ MCP server 以 **stdio 子进程**方式运行：AI 客户端负责拉起 `pytho
 
 ### 1.4 验证接入成功
 
-重启客户端后，新建对话，看工具/锤子图标是否出现 **10 个 autovs 工具**（doctor、library_stats、library_search、prepare_receptor、run_gate、submit_dock、dock_status、query_ranking、visualize、generate_report）。也可以直接问 AI：
+重启客户端后，新建对话，看工具/锤子图标是否出现 **11 个 autovs 工具**（doctor、library_stats、library_search、prepare_receptor、run_gate、submit_dock、dock_status、query_ranking、visualize、generate_report、package）。也可以直接问 AI：
 
 > "调用 doctor 工具体检一下环境"
 
@@ -90,7 +90,7 @@ AI 返回 vina/pymol/库条数即接入成功。
 
 ---
 
-## 2. 十个工具详解
+## 2. 十一个工具详解
 
 按虚拟筛选的执行顺序介绍。**你通常不需要记参数**——AI 会从对话上下文里填，但知道每个工具做什么有助于你下指令。
 
@@ -106,6 +106,7 @@ AI 返回 vina/pymol/库条数即接入成功。
 | 8 | `query_ranking` | 查排行榜 Top N（可只看阈值命中） | `target_yaml`, `tag`, `top_n`, `below_threshold_only` | 对接完/中途看结果 |
 | 9 | `visualize` | 生成 3D 口袋图 + 2D 相互作用图 + 3D\|2D 对照图 | `target_yaml`, `tag`, `top_n` 或 `entries` | 深入看具体分子 |
 | 10 | `generate_report` | 生成 Markdown 任务报告，并在报告同目录附全量 rank 排行 CSV 副本 | `target_yaml`, `tag`, `top_show` | 收尾交付 |
+| 11 | `package` | 任务自包含目录（报告/排行副本/图谱/MANIFEST）压缩为 zip 交付包 | `target_yaml`, `tag`, `out`(可选自定义路径) | 收尾交付（dock 完成已自动打包，用于补打/自定义路径） |
 
 细节说明：
 

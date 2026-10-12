@@ -35,6 +35,7 @@ output_data/<靶点>/      # full_ranking.csv / full_summary.json（对接产物
 output_figure/<靶点>/<批次>/   # 任务自包含目录，整包可拷走：
                          #   report.md + full_ranking.csv(全量排行副本) + MANIFEST.csv
                          #   + pose_R{rank}_{药名}_{3d|2d|pair}.png + top_overview.png
+                         # dock 完成自动 zip 打包为 ../<靶点>_<批次>_results_<日期>.zip（autovs package）
 tests/                   # pytest，15 项；运行：绝对路径 python -m pytest tests/ -q
 docs/                    # framework.md（架构）mcp_guide.md（MCP 使用）
 ```
@@ -43,7 +44,7 @@ docs/                    # framework.md（架构）mcp_guide.md（MCP 使用）
 
 - 启动：`autovs mcp` 或 `python -m autovs.mcp_server`（stdio 传输）
 - 依赖 pin：`mcp>=1.30,<2`（2.x 改名 MCPServer 不兼容）
-- 10 工具：doctor / library_stats / library_search / prepare_receptor / run_gate / submit_dock / dock_status / query_ranking / visualize / generate_report
+- 11 工具：doctor / library_stats / library_search / prepare_receptor / run_gate / submit_dock / dock_status / query_ranking / visualize / generate_report / package
 - 长任务模式：submit_dock 子进程提交 + job 映射持久化 `temp/mcp_jobs.json`（server 重启可追查）+ dock_status 读 result.json 真实进度
 - 客户端接入 JSON 见 README「MCP 配置」节；依赖与筛选运行环境相互独立
 

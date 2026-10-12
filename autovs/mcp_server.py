@@ -14,6 +14,7 @@
     query_ranking     查询排行榜（top_n / 阈值过滤）
     visualize         3D 口袋图 + 2D 相互作用图 + 对照图（Top N 或指定化合物）
     generate_report   Markdown 任务报告
+    package           任务目录 zip 打包（自包含交付包，dock 链路末尾自动执行）
 
 长任务设计：对接为小时级任务，submit_dock 以子进程启动 `autovs dock`，
 job 映射持久化到 temp/mcp_jobs.json（server 重启不丢）；dock_status 直接数
@@ -145,7 +146,7 @@ def run_gate(target_yaml: str) -> str:
 def submit_dock(target_yaml: str, tag: str, limit: int | None = None) -> str:
     """提交批量对接为后台任务（断点续跑，自动跳过已完成化合物），立即返回 job_id。
     MW/可旋转键超限的离群大分子提交前自动预过滤（status=skipped），单配体超时/失败自动隔离不阻塞批次。
-    limit 用于小规模冒烟。完成后自动汇总排行 + 可视化 + 报告（含排行 CSV 副本）。"""
+    limit 用于小规模冒烟。完成后自动汇总排行 + 可视化 + 报告（含排行 CSV 副本）+ zip 打包。"""
     _load_jobs()
     job_id = time.strftime("%Y%m%d_%H%M%S")
     log_path = BASE / "temp" / f"mcp_dock_{job_id}.log"
@@ -229,6 +230,16 @@ def generate_report(target_yaml: str, tag: str, top_show: int = 20) -> str:
     path = gen(cfg, tag, top_show=int(top_show))
     csv_copy = path.parent / f"{tag}_ranking.csv"
     return f"任务报告: {path}（排行副本: {csv_copy}）"
+
+
+@mcp.tool()
+def package(target_yaml: str, tag: str, out: str = "") -> str:
+    """把任务自包含目录（报告/排行副本/图谱/MANIFEST）压缩为 zip 交付包。
+    默认输出 output_figure/<靶点>/<靶点>_<批次>_results_<日期>.zip；dock 完成链路末尾自动打包，本工具用于补打或自定义路径。"""
+    from .packaging import package_task
+    cfg = _cfg(target_yaml)
+    r = package_task(cfg, tag, out=Path(out) if out else None)
+    return json.dumps(r, ensure_ascii=False)
 
 
 def main() -> None:

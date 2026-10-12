@@ -11,7 +11,8 @@ flowchart LR
     D --> E["汇总排行<br/>CSV + 打分分布"]
     E --> F["自动可视化<br/>3D 口袋图 · 2D 相互作用图<br/>3D|2D 对照图"]
     F --> G["Markdown 任务报告"]
-    G -.-> H["MCP server<br/>AI 客户端自然语言驱动"]
+    G --> H["zip 任务打包<br/>自包含交付包"]
+    H -.-> I["MCP server<br/>AI 客户端自然语言驱动"]
 ```
 
 > **零基础？请从[图文教程](docs/tutorial.md)开始**——30 分钟从裸机到出第一份报告，每个输出都有逐元素解读。
@@ -39,7 +40,7 @@ flowchart LR
   - 2D：Discovery Studio 风格相互作用图——配体键线式居中、残基椭圆环绕节点按相互作用类型着色
   - `*_pair.png` 横拼对照图：3D 与 2D 残基一一对应，同图互读
 - **任务报告**：Markdown 自包含报告（概览/质量门/统计/Top 排行/图谱对照/解读注意事项），内附全量 rank 排行 CSV 副本，与图谱同目录、相对链接、整包可拷走
-- **MCP server**：10 个工具暴露全流程，AI 客户端自然语言驱动（长任务提交/查询模式，server 重启不丢任务）
+- **MCP server**：11 个工具暴露全流程，AI 客户端自然语言驱动（长任务提交/查询模式，server 重启不丢任务）
 
 ## 环境配置
 
@@ -171,11 +172,13 @@ autovs library verify-offline         离线可用性自检
 autovs receptor --target <yaml>       受体清洗（去配体/水/altloc 归一）+ 加氢
 autovs gate     --target <yaml>       质量门：共晶重对接 RMSD 校验
 autovs dock     --target <yaml> --tag <标签> [--limit N]
-                                      批量对接（断点续跑；完成后自动汇总排行 + 可视化 + 报告）
+                                      批量对接（断点续跑；完成后自动汇总排行 + 可视化 + 报告 + zip 打包）
 autovs visualize --target <yaml> --tag <标签> [--top N | --entry "名称,IDA..."]
                                       3D+2D+对照图；--entry 指定化合物（忽略 --top）
 autovs report    --target <yaml> --tag <标签> [--top N]
                                       生成 Markdown 任务报告
+autovs package   --target <yaml> --tag <标签> [--out 路径]
+                                      任务自包含目录打包为 zip 交付包（dock 完成会自动执行）
 autovs mcp                            启动 MCP server（stdio）
 ```
 
@@ -203,7 +206,7 @@ pip install "mcp>=1.30,<2"      # 或安装本体时带上：pip install -e ".[m
 }
 ```
 
-> **详细配置步骤（各客户端配置文件位置）、10 个工具逐个详解、实战话术示例与排错表，见 [MCP 指南](docs/mcp_guide.md)。**
+> **详细配置步骤（各客户端配置文件位置）、11 个工具逐个详解、实战话术示例与排错表，见 [MCP 指南](docs/mcp_guide.md)。**
 
 | 工具 | 功能 |
 |---|---|
@@ -212,6 +215,7 @@ pip install "mcp>=1.30,<2"      # 或安装本体时带上：pip install -e ".[m
 | `submit_dock` / `dock_status` | 后台提交对接（返回 job_id）/ 查询真实进度（数 result.json，server 重启可追查） |
 | `query_ranking` | 排行榜查询（Top N / 阈值过滤） |
 | `visualize` / `generate_report` | 图谱生成（支持 entries 指定化合物）/ 任务报告 |
+| `package` | 任务目录 zip 打包（自包含交付包，dock 完成自动执行） |
 
 ## 输出布局
 
@@ -229,6 +233,7 @@ output_figure/<靶点>/
     pose_R{rank}_{药名}_2d.{pdf,png}  2D 相互作用图
     pose_R{rank}_{药名}_pair.png      3D|2D 横拼对照（文件名即对应关系）
     top_overview.png                  Top N 叠加总览
+  <靶点>_<批次>_results_<日期>.zip    任务交付包（dock 完成自动打包，含整个 <批次>/ 目录）
 temp/                                 中间产物（受体/对接工作目录，可随时删除重算）
 ```
 
